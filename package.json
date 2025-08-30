@@ -1,0 +1,41 @@
+{
+  "name": "dailynest",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "cross-env RUN_KEYSTATIC=false astro build",
+    "preview": "cross-env RUN_KEYSTATIC=false astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.9.4",
+    "@astrojs/mdx": "^4.3.4",
+    "@astrojs/react": "^4.3.0",
+    "@astrojs/rss": "^4.0.12",
+    "@astrojs/sitemap": "^3.5.1",
+    "@fontsource-variable/source-serif-4": "^5.2.8",
+    "@fontsource/source-sans-pro": "^5.2.5",
+    "@keystatic/astro": "^5.0.6",
+    "@keystatic/core": "^0.5.48",
+    "@pagefind/default-ui": "^1.3.0",
+    "@tailwindcss/vite": "^4.1.12",
+    "@types/react": "^19.1.12",
+    "@types/react-dom": "^19.1.9",
+    "astro": "^5.13.5",
+    "astro-pagefind": "^1.8.4",
+    "date-fns": "^4.1.0",
+    "mdast-util-to-string": "^4.0.0",
+    "pagefind": "^1.3.0",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "reading-time": "^1.5.0",
+    "tailwindcss": "^4.1.12",
+    "typescript": "^5.9.2"
+  },
+  "devDependencies": {
+    "@tailwindcss/typography": "^0.5.16",
+    "daisyui": "^5.0.54",
+    "cross-env": "^10.0.0"
+  }
+}

@@ -1,0 +1,147 @@
+---
+isDraft: false
+isMainHeadline: false
+isSubHeadline: true
+description: Publishing articles to DailyNest is a straightforward process. Follow these steps to contribute your content.
+title: How to Contribute and Add Articles to DailyNest
+cover: '@assets/images/articles/how-to-contribute-and-add-articles-to-daily-nest/cover.png'
+category: blog
+publishedTime: 2025-08-30T00:00:00.000Z
+authors:
+  - muhammadfiaz
+---
+
+### **Steps to Push Your Own Articles to DailyNest**
+
+---
+
+### 1. **Fork and Clone the Repository**
+
+First, you'll need to **fork** the DailyNest repository on GitHub. This creates your own copy of the project, where you can make changes.
+
+1. Go to the [DailyNest GitHub repo](https://github.com/dailynest/dailynest.github.io) and click **Fork** (top-right).
+2. Once forked, **clone** your repository to your local machine:
+
+   ```
+   git clone https://github.com/YOUR_USERNAME/dailynest.github.io.git
+   cd dailynest.github.io
+
+   ```
+
+---
+
+### 2. **Set Up the Development Environment**
+
+Before you can start adding articles, you need to set up your local development environment:
+
+1. **Create a `.env` file** in the root of your project and add:
+
+   ```
+   RUN_KEYSTATIC=true
+
+   ```
+2. **Install dependencies**:
+   * If you’re using **npm**:
+
+     ```
+     npm install
+
+     ```
+   * Or if you prefer **bun**:
+
+     ```
+     bun install
+
+     ```
+
+---
+
+### 3. **Run the Development Server**
+
+To preview your articles locally, you’ll need to run the development server:
+
+```
+npm run dev
+
+```
+
+Or with **bun**:
+
+```
+bun dev
+
+```
+
+Visit [http://127.0.0.1:4321](http://127.0.0.1:4321/) to view your local instance.
+
+---
+
+### 4. **Add Yourself as an Author**
+
+To add yourself as an author:
+
+1. Go to [Keystatic](http://127.0.0.1:4321/keystatic/).
+2. Log in using your GitHub account if prompted.
+3. Click on **Authors** in the sidebar, then **Add New Author**.
+4. Fill in the details with your name, avatar (you can use your GitHub avatar URL), and bio.
+
+---
+
+### 5. **Create Your Article**
+
+1. In Keystatic, click on **Articles** in the sidebar.
+2. Click **Create** and start writing your article in Markdown or MDX format.
+3. Make sure to include important fields:
+   * **Title**: Your article's title (e.g., "Getting Started with React").
+   * **Slug**: URL-friendly version of the title (e.g., `getting-started-with-react`).
+   * **Category**: Assign appropriate categories (e.g., `react`, `javascript`, `web development`).
+   * **Published Time**: Date in ISO format (e.g., `2025-08-30T14:48:00.000Z`).
+   * **Authors**: Set the author field to your slug (e.g., `muhammadfiaz`).
+   * **Content**: Write your article or paste your tutorial.
+
+---
+
+### 6. **Commit and Push Changes**
+
+After adding your article, you need to commit and push it to your forked repository.
+
+1. **Stage and commit your changes**:
+
+   ```
+   git add .
+   git commit -m "Add new article: Getting Started with React"
+
+   ```
+2. **Push your changes**:
+
+   ```
+   git push origin main
+
+   ```
+
+---
+
+### 7. **Create a Pull Request**
+
+1. Go to your forked repository on GitHub.
+2. You should see an option to **Compare & Pull Request**. Click on it.
+3. Add a description of your article and any relevant details.
+4. Submit the **Pull Request** to the main DailyNest repository.
+
+---
+
+### 8. **Wait for Review and Approval**
+
+Once your pull request is reviewed by the maintainers, it will be merged into the main repository and your article will be live on **DailyNest**!
+
+---
+
+### Summary:
+
+* **Fork and Clone** the repo.
+* **Set up** `.env` and install dependencies.
+* **Run the development server** to preview changes locally.
+* **Add yourself as an author** through Keystatic.
+* **Create and add your article** in Keystatic CMS.
+* **Commit and push** changes to your forked repository.
+* **Create a Pull Request** to contribute.
