@@ -16,7 +16,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '18'  # Use Node.js version 18
+          node-version: '20'  # Use Node.js version 20
 
       - name: Install dependencies
         run: |
@@ -31,4 +31,4 @@ jobs:
         with:
           branch: gh-pages  # Deploys to the 'gh-pages' branch
           folder: dist      # Folder that contains the built site (Astro's default output folder)
-          token: ${{ secrets.GITHUB_TOKEN }}  # GitHub automatically provides this token for authentication
+          token: ${{ secrets.GH_TOKEN }}  # GitHub token from the secret
