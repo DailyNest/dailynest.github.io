@@ -5,6 +5,8 @@ A tech tutorials and news site built with Astro, focused on clear, readable cont
 > **ℹ️ Info**  
 > DailyNest is an open-source community project; contributions and bug reports are welcome.
 
+> Note: This Project is in Active Development
+
 ## 🌐 Demo
 
 Explore the live demo: https://dailynest.github.io/
