@@ -1,34 +1,46 @@
-name: Astro Deploy
+name: Deploy to GitHub Pages
 
 on:
   push:
-    branches:
-      - main   # Trigger build on push to the 'main' branch (adjust if your branch is named differently)
+    branches: [ main ]  # Trigger on push to the 'main' branch
+  workflow_dispatch:  # Allows you to run manually from the Actions tab
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Set up Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
-          node-version: '20'  # Use Node.js version 20
+          node-version: '20'  # Use Node.js version 20, as per your request
 
-      - name: Install dependencies
+      - name: Install dependencies and build site
         run: |
           npm install
+          npm run build
 
-      - name: Build Astro site
-        run: |
-          npm run build  # This runs the 'build' script in your package.json
-
-      - name: Deploy to GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@v4
+      - name: Upload the built site to GitHub Pages
+        uses: withastro/action@v3
         with:
-          branch: gh-pages  # Deploys to the 'gh-pages' branch
-          folder: dist      # Folder that contains the built site (Astro's default output folder)
-          token: ${{ secrets.GH_TOKEN }}  # GitHub token from the secret
+          # The default settings should work, but you can customize if needed
+          node-version: 20
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
