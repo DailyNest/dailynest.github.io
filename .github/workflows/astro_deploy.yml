@@ -3,7 +3,7 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [ main ]  # Trigger on push to the 'main' branch
-  workflow_dispatch:  # Allows you to run manually from the Actions tab
+  workflow_dispatch:  # Allows manual run from Actions tab
 
 permissions:
   contents: read
@@ -14,23 +14,39 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      # 1. Checkout code
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # 2. Set up Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20'  # Use Node.js version 20, as per your request
+          node-version: '20'
 
+      # 3. Install dependencies and build site
       - name: Install dependencies and build site
         run: |
           npm install
           npm run build
+        env:
+          # Giscus environment variables (from repo Secrets)
+          VITE_GISCUS_REPO: ${{ secrets.PUBLIC_GISCUS_REPO }}
+          VITE_GISCUS_REPO_ID: ${{ secrets.PUBLIC_GISCUS_REPO_ID }}
+          VITE_GISCUS_CATEGORY: ${{ secrets.PUBLIC_GISCUS_CATEGORY }}
+          VITE_GISCUS_CATEGORY_ID: ${{ secrets.PUBLIC_GISCUS_CATEGORY_ID }}
+          VITE_GISCUS_MAPPING: ${{ secrets.PUBLIC_GISCUS_MAPPING }}
+          VITE_GISCUS_STRICT: ${{ secrets.PUBLIC_GISCUS_STRICT }}
+          VITE_GISCUS_REACTIONS_ENABLED: ${{ secrets.PUBLIC_GISCUS_REACTIONS_ENABLED }}
+          VITE_GISCUS_EMIT_METADATA: ${{ secrets.PUBLIC_GISCUS_EMIT_METADATA }}
+          VITE_GISCUS_INPUT_POSITION: ${{ secrets.PUBLIC_GISCUS_INPUT_POSITION }}
+          VITE_GISCUS_THEME: ${{ secrets.PUBLIC_GISCUS_THEME }}
+          VITE_GISCUS_LANG: ${{ secrets.PUBLIC_GISCUS_LANG }}
 
+      # 4. Upload the built site to GitHub Pages (Astro Action)
       - name: Upload the built site to GitHub Pages
         uses: withastro/action@v3
         with:
-          # The default settings should work, but you can customize if needed
           node-version: 20
 
   deploy:
@@ -39,7 +55,6 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
