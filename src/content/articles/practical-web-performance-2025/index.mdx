@@ -1,0 +1,71 @@
+---
+isDraft: false
+isMainHeadline: false
+isSubHeadline: false
+title: Practical Web Performance in 2025
+description: A field guide to shipping fast, resilient sites with Core Web Vitals, smarter assets, and lean JavaScript.
+coverUrl: https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=1600&auto=format&fit=crop
+covert_alt: Developer laptop with performance charts and code on screen
+category: technology
+publishedTime: 2025-08-31T17:00:00.000Z
+authors:
+  - muhammadfiaz
+keywords:
+  - performance
+  - core web vitals
+  - lighthouse
+---
+
+If users feel your site before they see it, you’ve already lost them. In 2025, real-world performance is about eliminating wasted work, prioritizing the obvious wins, and measuring in production—not chasing a perfect Lighthouse score.
+
+## What actually matters now
+
+- Core Web Vitals: LCP, CLS, INP. Fast pixels, stable layout, responsive interactions.
+- Time to usable: quick render of the useful above-the-fold stuff beats loading everything perfectly.
+- Consistency: steady p75 across devices and regions, not just your dev laptop.
+
+## Set a performance budget
+
+- JavaScript: aim for < 150 KB gzipped on critical routes.
+- Images: < 200 KB above the fold; defer the rest. Prefer AVIF/WEBP.
+- Fonts: 1–2 families, 2 weights max; preload critical; use `font-display: swap`.
+
+## Images: the easiest big win
+
+- Generate responsive sources and correct sizes. Serve modern formats with fallbacks.
+- Lazy-load everything below the fold; mark hero image as `fetchpriority="high"` and `decoding="async"`.
+- Provide accurate `alt` text. It helps SEO and accessibility.
+
+## CSS: keep it simple
+
+- Inline minimal critical CSS. Defer everything else.
+- Purge unused styles. Avoid heavy runtime CSS-in-JS for static content.
+
+## JavaScript: the real diet
+
+- Ship islands of interactivity, not an entire SPA by default.
+- Split vendor code, defer non-essential scripts, and prefer native browser features.
+- Audit dependencies quarterly. If a library does one small thing, use a utility or write it.
+
+## Fonts without the jank
+
+- Preload your primary text font, limit variants, and avoid FOIT by using `swap`.
+- Consider system fonts for UI; custom fonts for headings only.
+
+## Network and caching
+
+- Cache aggressively at the edge. Immutable assets with content hashes; short TTL for HTML.
+- Use `stale-while-revalidate` to keep pages snappy during deploys.
+
+## Monitor in production
+
+- Collect RUM data: LCP, CLS, INP, and route-level page weight.
+- Segment by device, network, and geography. Optimize for your audience.
+
+## Checklists you can actually use
+
+- Before merging: run a quick Lighthouse and bundle size check on the PR.
+- Before deploy: p75 vitals from staging or canary traffic.
+- After deploy: diff p75 against last release and alert on regressions.
+
+Performance is a mindset, not a one-off sprint. Budget it, measure it, and keep the surface area small so you can move fast without breaking the experience.

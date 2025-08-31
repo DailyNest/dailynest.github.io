@@ -10,7 +10,9 @@ import ThemeController from "../bases/theme-controller.astro";
   class="navbar border-b border-primary-content/80 dark:border-primary-content/20"
 >
   <div class="navbar-start lg:w-1/2">
-    <MenuDropdown />
+    <div class="lg:hidden">
+      <MenuDropdown />
+    </div>
     <a class="site-brand text-xl px-2 text-nowrap lg:hidden" href="/"
       >{SITE.title}</a
     >
@@ -20,6 +22,12 @@ import ThemeController from "../bases/theme-controller.astro";
   </div>
   <div class="navbar-end">
     <ThemeController />
+    <a
+      class="btn btn-sm btn-primary hidden md:inline-flex mr-2"
+      href="/articles/how-to-contribute-and-add-articles-to-daily-nest"
+    >
+      Contribute
+    </a>
     <a class="btn btn-ghost btn-circle" href="/search" aria-label="Search">
       <Search01 />
     </a>

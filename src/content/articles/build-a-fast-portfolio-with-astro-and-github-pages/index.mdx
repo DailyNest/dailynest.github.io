@@ -1,0 +1,99 @@
+---
+isDraft: false
+isMainHeadline: false
+isSubHeadline: false
+title: Build a Fast Portfolio with Astro and GitHub Pages
+description: Step-by-step tutorial to scaffold, style, and deploy a fast personal site using Astro and GitHub Pages.
+coverUrl: https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1600&auto=format&fit=crop
+covert_alt: Developer desk with laptop and notes showing a site in progress
+category: tutorial
+publishedTime: 2025-08-31T17:00:00.000Z
+authors:
+  - muhammadfiaz
+keywords:
+  - astro
+  - tutorial
+  - github pages
+  - portfolio
+---
+
+You don’t need a JavaScript framework to ship a great personal site. Astro gives you a content-first workflow and ships almost no JS by default. This guide walks you from a blank folder to a live portfolio—fast.
+
+## What you’ll build
+
+- A clean, responsive one-page portfolio with About, Projects, and Contact sections
+- A blog route powered by content collections
+- Automated deployment to GitHub Pages
+
+## Prerequisites
+
+- Node 20+ or Bun
+- A GitHub account
+
+## 1) Create the project
+
+Create a new Astro project and start the dev server. Accept defaults when prompted.
+
+```bash
+npm create astro@latest my-portfolio
+cd my-portfolio
+npm install
+npm run dev
+```
+
+Open http://127.0.0.1:4321 to confirm it’s running.
+
+## 2) Add a base layout
+
+Create `src/layouts/base.astro` with a header, main, and footer. Keep typography simple. Add a global stylesheet in `src/styles/global.css` and import it once in your layout.
+
+## 3) Build the home page sections
+
+- About: a brief intro, a photo, and a CTA to your projects
+- Projects: cards with title, description, tech, and links
+- Contact: links to email and GitHub/LinkedIn
+
+Use semantic HTML and minimal utility classes for readability.
+
+## 4) Add a blog with content collections
+
+Define an `articles` collection in `src/content.config.ts` with a schema for title, description, cover image, category, and published date. Put posts in `src/content/articles/<slug>/index.mdx`.
+
+## 5) Make it look good (quick wins)
+
+- Constrain content width to ~72ch for readability
+- Use a serif display for headings and a clean sans for body
+- Add dark mode with a class toggle; persist preference with localStorage
+
+## 6) Ship to GitHub Pages
+
+1. Create a new GitHub repo and push your code
+2. In `astro.config.mjs`, set the `site` to your public URL
+3. Add a GitHub Actions workflow or use your existing CI to build and deploy the `dist` folder to Pages
+
+For a quick win, use the official docs to scaffold the Pages workflow. Ensure the branch and output folder are configured correctly.
+
+## 7) Polish and iterate
+
+- Add a Projects JSON or MDX list to keep content out of markup
+- Create a `Card` component so new projects are easy to add
+- Add Open Graph metadata to improve link previews
+- Measure with Lighthouse and keep JS under control—Astro helps you here
+
+## Troubleshooting
+
+### My CSS isn’t loading on Pages
+
+Check your `site` config and `base` path. Wrong values produce broken asset URLs in production.
+
+### The blog index is empty
+
+Validate frontmatter against your schema. Missing fields or invalid dates will exclude posts.
+
+### Images look blurry
+
+Prefer high-resolution sources and use `astro:assets` for local images. Set helpful `alt` text for accessibility and SEO.
+
+## Where to go next
+
+Add a contact form (serverless or static form service), integrate analytics, and write a “Now” page. Keep shipping small improvements every week—you’ll be miles ahead of most portfolios.

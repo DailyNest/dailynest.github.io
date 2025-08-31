@@ -94,10 +94,12 @@ const OGImage = new URL(meta.ogImage, Astro.url).href;
           property="article:published_time"
           content={new Date(meta.publishedTime).toISOString()}
         />
-        <meta
-          property="article:modified_time"
-          content={new Date(meta.lastModified).toISOString()}
-        />
+        {meta.lastModified && (
+          <meta
+            property="article:modified_time"
+            content={new Date(meta.lastModified).toISOString()}
+          />
+        )}
 
         {meta.authors.map((author) => (
           <>
@@ -108,7 +110,46 @@ const OGImage = new URL(meta.ogImage, Astro.url).href;
             />
           </>
         ))}
+
+        <!-- Article structured data -->
+        <script type="application/ld+json">
+          {JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'Article',
+            headline: meta.metaTitle,
+            description: meta.description,
+            image: [OGImage],
+            datePublished: new Date(meta.publishedTime).toISOString(),
+            ...(meta.lastModified && { dateModified: new Date(meta.lastModified).toISOString() }),
+            author: meta.authors.map((a) => ({ '@type': 'Person', name: a.name, url: `${Astro.site}authors/${a.link}` })),
+            mainEntityOfPage: {
+              '@type': 'WebPage',
+              '@id': meta.canonical || canonicalURL,
+            },
+            publisher: {
+              '@type': 'Organization',
+              name: SITE.title,
+              logo: {
+                '@type': 'ImageObject',
+                url: new URL('/favicon.png', Astro.site).href,
+              },
+            },
+          })}
+        </script>
       </>
+    ) : null
+  }
+
+  {
+    !isArticleMeta(meta) && meta.metaTitle ? (
+      <script type="application/ld+json">
+        {JSON.stringify({
+          '@context': 'https://schema.org',
+          '@type': 'WebSite',
+          name: meta.metaTitle,
+          url: SITE.url,
+        })}
+      </script>
     ) : null
   }
 

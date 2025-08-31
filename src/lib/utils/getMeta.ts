@@ -26,14 +26,22 @@ export const getMeta = async (
       const { remarkPluginFrontmatter } = await render(collection);
       const authors = authorsHandler.getAuthors(collection.data.authors);
 
-      const meta: ArticleMeta = {
-  title: `${collection.data.title} - ${SITE.title}`,
+      const ogImage = collection.data.cover
+        ? collection.data.cover.src
+        : collection.data.coverUrl
+          ? collection.data.coverUrl
+          : defaultImage.src;
+
+      const ogImageAlt = collection.data.covert_alt || collection.data.title;
+
+    const meta: ArticleMeta = {
+  title: `${collection.data.title} | ${SITE.title}`,
   metaTitle: collection.data.title,
   description: collection.data.description || SITE.description,
-        ogImage: collection.data.cover.src,
-        ogImageAlt: collection.data.covert_alt || collection.data.title,
+        ogImage,
+        ogImageAlt,
         publishedTime: normalizeDate(collection.data.publishedTime),
-        lastModified: remarkPluginFrontmatter.lastModified,
+        ...(remarkPluginFrontmatter.lastModified && { lastModified: remarkPluginFrontmatter.lastModified }),
         authors: authors.map((author) => ({
           name: author.data.name,
           link: `${author.id}`,
@@ -61,10 +69,10 @@ export const getMeta = async (
       }
 
       const title = collection.id === "categories" && category
-        ? `${capitalizeFirstLetter(category)} - ${SITE.title}`
+        ? `${capitalizeFirstLetter(category)} | ${SITE.title}`
         : collection.id === "home"
           ? SITE.title
-          : `${capitalizeFirstLetter(collection.data.title)} - ${SITE.title}`;
+          : `${capitalizeFirstLetter(collection.data.title)} | ${SITE.title}`;
 
       const meta: Meta = {
         title,

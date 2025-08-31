@@ -30,7 +30,6 @@ export default defineConfig({
   image: {
     responsiveStyles: true,
     breakpoints: [640, 1024],
-  domains: ["avatars.githubusercontent.com"],
   },
   integrations,
   vite: {

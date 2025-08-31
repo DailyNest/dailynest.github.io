@@ -27,15 +27,33 @@ const { article, isLast } = Astro.props;
     ]}
   >
     <div class="w-full lg:w-60 aspect-video">
-      <Image
-        src={article.data.cover}
-        alt={article.data.covert_alt
-          ? article.data.covert_alt
-          : article.data.title}
-        layout="constrained"
-        loading={"eager"}
-        class="aspect-video rounded w-full h-full"
-      />
+      {
+        article.data.cover ? (
+          <Image
+            src={article.data.cover}
+            alt={
+              article.data.covert_alt
+                ? article.data.covert_alt
+                : article.data.title
+            }
+            layout="constrained"
+            loading="lazy"
+            class="aspect-video rounded w-full h-full"
+          />
+        ) : article.data.coverUrl ? (
+          <img
+            src={article.data.coverUrl}
+            alt={
+              article.data.covert_alt
+                ? article.data.covert_alt
+                : article.data.title
+            }
+            loading="lazy"
+            decoding="async"
+            class="aspect-video rounded w-full h-full object-cover"
+          />
+        ) : null
+      }
     </div>
     <div class="flex-1 space-y-2">
       <h3 class="text-xl font-semibold lg:group-hover:underline">

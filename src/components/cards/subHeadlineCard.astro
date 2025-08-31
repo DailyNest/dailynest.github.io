@@ -3,7 +3,7 @@ import { Image } from "astro:assets";
 import type { CollectionEntry } from "astro:content";
 import Divider from "@/components/bases/divider.astro";
 import { render } from "astro:content";
-import { getDateDistance } from "@/lib/utils/date";
+import { getDateDistance, normalizeDate } from "@/lib/utils/date";
 import { categoriesHandler } from "@/lib/handlers/categories";
 
 type Props = {
@@ -44,22 +44,47 @@ const category = categoriesHandler.oneCategory(article.data.category.id);
       <span class="text-primary dark:text-secondary">{category.data.title}</span
       >
       <Divider />
-      <span>{getDateDistance(remarkPluginFrontmatter.lastModified)}</span>
+      <span
+        >{
+          getDateDistance(
+            remarkPluginFrontmatter.lastModified ||
+              normalizeDate(article.data.publishedTime)
+          )
+        }</span
+      >
     </div>
   </div>
 
   <div
     class="overflow-hidden w-[165px] h-[125px] md:w-[120px] md:h-full shrink-0"
   >
-    <Image
-      src={article.data.cover}
-      alt={article.data.covert_alt
-        ? article.data.covert_alt
-        : article.data.title}
-      loading="eager"
-      widths={[120, 320]}
-      layout="constrained"
-      class="object-cover rounded w-full h-full"
-    />
+    {
+      article.data.cover ? (
+        <Image
+          src={article.data.cover}
+          alt={
+            article.data.covert_alt
+              ? article.data.covert_alt
+              : article.data.title
+          }
+          loading="lazy"
+          widths={[120, 320]}
+          layout="constrained"
+          class="object-cover rounded w-full h-full"
+        />
+      ) : article.data.coverUrl ? (
+        <img
+          src={article.data.coverUrl}
+          alt={
+            article.data.covert_alt
+              ? article.data.covert_alt
+              : article.data.title
+          }
+          loading="lazy"
+          decoding="async"
+          class="object-cover rounded w-full h-full"
+        />
+      ) : null
+    }
   </div>
 </article>

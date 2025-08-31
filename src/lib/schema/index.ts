@@ -2,19 +2,26 @@ import { reference, z } from "astro:content";
 import type { ImageFunction } from "astro:content";
 
 export const articleSchema = (image: ImageFunction) =>
-  z.object({
-    isDraft: z.boolean().default(false),
-    isMainHeadline: z.boolean().default(false),
-    isSubHeadline: z.boolean().default(false),
-    cover: image(),
-    covert_alt: z.string().optional(),
-    title: z.string().max(60, "Too long, max 60 characters"),
-    description: z.string().max(160, "Too long, max 160 characters"),
-    category: reference("categories"),
-    authors: z.array(reference("authors")).min(1),
-  keywords: z.array(z.string()).optional(),
-    publishedTime: z.string().datetime().or(z.date()),
-  });
+  z
+    .object({
+      isDraft: z.boolean().default(false),
+      isMainHeadline: z.boolean().default(false),
+      isSubHeadline: z.boolean().default(false),
+      // Either a local image (recommended) or an external URL can be provided
+      cover: image().optional(),
+      coverUrl: z.string().url().optional(),
+      covert_alt: z.string().optional(),
+      title: z.string().max(60, "Too long, max 60 characters"),
+      description: z.string().max(160, "Too long, max 160 characters"),
+      category: reference("categories"),
+      authors: z.array(reference("authors")).min(1),
+      keywords: z.array(z.string()).optional(),
+      publishedTime: z.string().datetime().or(z.date()),
+    })
+    .refine((data) => !!(data.cover || data.coverUrl), {
+      message: "Provide either 'cover' (image) or 'coverUrl' (URL)",
+      path: ["cover"],
+    });
 
 export const viewSchema = z.object({
   title: z.string(),

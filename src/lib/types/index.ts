@@ -40,7 +40,7 @@ export type Meta = {
 
 export type ArticleMeta = Meta & {
   publishedTime: string;
-  lastModified: string;
+  lastModified?: string;
   authors: Author[];
 };
 

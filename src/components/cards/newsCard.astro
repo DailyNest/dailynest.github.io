@@ -20,15 +20,35 @@ const category = categoriesHandler.oneCategory(article.data.category.id);
   class="col-span-1 group max-w-sm mx-auto flex flex-col gap-2 h-full relative isolate"
 >
   <div class="aspect-video overflow-hidden rounded-md">
-    <Image
-      src={article.data.cover}
-      alt={article.data.covert_alt
-        ? article.data.covert_alt
-        : article.data.title}
-      loading={index < 3 ? "eager" : "lazy"}
-      layout="constrained"
-      class="w-full h-full object-cover"
-    />
+    {
+      article.data.cover ? (
+        <Image
+          src={article.data.cover}
+          alt={
+            article.data.covert_alt
+              ? article.data.covert_alt
+              : article.data.title
+          }
+          loading={index === 0 ? "eager" : "lazy"}
+          fetchpriority={index === 0 ? "high" : "auto"}
+          layout="constrained"
+          class="w-full h-full object-cover"
+        />
+      ) : article.data.coverUrl ? (
+        <img
+          src={article.data.coverUrl}
+          alt={
+            article.data.covert_alt
+              ? article.data.covert_alt
+              : article.data.title
+          }
+          loading={index === 0 ? "eager" : "lazy"}
+          decoding="async"
+          fetchpriority={index === 0 ? "high" : "auto"}
+          class="w-full h-full object-cover"
+        />
+      ) : null
+    }
   </div>
   <div class="flex flex-col flex-1">
     <h3

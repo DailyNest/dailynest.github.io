@@ -1,0 +1,56 @@
+---
+isDraft: false
+isMainHeadline: true
+isSubHeadline: false
+title: Getting Started with Astro for Beginners
+description: A practical, end-to-end guide to build, structure, style, and deploy your first Astro site.
+coverUrl: https://images.unsplash.com/photo-1515879218367-8466d910aaa4?q=80&w=1600&auto=format&fit=crop
+covert_alt: Developer working at laptop with code editor open, representing Astro setup
+category: programming
+publishedTime: 2025-08-31T17:00:00.000Z
+authors:
+  - muhammadfiaz
+keywords:
+  - astro
+  - static site
+  - beginners
+---
+
+Astro is a content-first framework that ships minimal JavaScript by default. If you care about performance, authoring experience, and flexibility, it’s a great choice for blogs, documentation, and marketing sites.
+
+## Why Astro is fast by default
+
+Astro’s islands architecture hydrates interactive components in isolation instead of booting a full client-side app. Static pages are built at compile time, so the browser downloads less code and renders faster. You can still opt into React, Vue, or Svelte on specific components where interactivity is needed.
+
+## Project setup and mental model
+
+- Pages live in `src/pages`. The file path becomes the route.
+- Content collections live in `src/content`. Schemas let you validate frontmatter.
+- Layouts in `src/layouts` keep structure consistent across pages.
+- Components in `src/components` compose UI without forcing a specific JS framework.
+
+## Step-by-step: from zero to a home page
+
+1. Create a layout in `src/layouts/base.astro` with a header, main, and footer.
+2. Add `src/pages/index.astro` using the base layout.
+3. Configure metadata (title, description, social tags) to improve SEO.
+4. Wire Tailwind or your preferred CSS strategy; Astro plays nicely with both utility and component CSS.
+
+## Content collections that scale
+
+Define an `articles` collection with a schema for `title`, `description`, `category`, `authors`, and `publishedTime`. This catches mistakes early—like missing thumbnails or invalid dates—and unlocks strong typing throughout your site.
+
+## Images that stay crisp and light
+
+Use `astro:assets` for local images to get automatic optimization. When using remote images, prefer high-resolution, well-composed sources and provide descriptive alt text. Combine with responsive styles to keep CLS low.
+
+![Starter project structure in a code editor](https://images.unsplash.com/photo-1515879218367-4da5bc84a7da?q=80&w=1600&auto=format&fit=crop)
+
+## Deployment in minutes
+
+Astro supports static output out of the box. For GitHub Pages, ensure your `site` and `base` in `astro.config.mjs` are correct, build, and deploy the `dist` folder. CI can automate this step on every push to `main`.
+
+## Next steps
+
+Add a post list, category pages, and pagination. Then iterate on typography, dark mode, and search. You’ll have a fast, maintainable site that’s a joy to author in.
+

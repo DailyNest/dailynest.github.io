@@ -19,6 +19,12 @@ import { NAVIGATION_LINKS, OTHER_LINKS } from "@/lib/config";
   >
     <li><a href="/" aria-label="Homepage">Home</a></li>
     <li><a href="/articles" aria-label="Articles Page">Articles</a></li>
+    <li>
+      <a
+        href="/articles/how-to-contribute-and-add-articles-to-daily-nest"
+        aria-label="Contribute">Contribute</a
+      >
+    </li>
 
     <li>
       <details>
@@ -41,6 +47,7 @@ import { NAVIGATION_LINKS, OTHER_LINKS } from "@/lib/config";
       <details>
         <summary>Other Pages</summary>
         <ul>
+          <li><a href="/faq" aria-label="FAQ">FAQ</a></li>
           {
             OTHER_LINKS.map(({ href, text, target }) => (
               <li>

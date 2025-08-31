@@ -4,7 +4,7 @@ import type { CollectionEntry } from "astro:content";
 import { render } from "astro:content";
 import Divider from "@/components/bases/divider.astro";
 import { categoriesHandler } from "@/lib/handlers/categories";
-import { getDateDistance } from "@/lib/utils/date";
+import { getDateDistance, normalizeDate } from "@/lib/utils/date";
 
 type Props = {
   article: CollectionEntry<"articles">;
@@ -19,14 +19,34 @@ const category = categoriesHandler.oneCategory(article.data.category.id);
 
 <article class="group relative isolate flex flex-col-reverse md:flex-col gap-4">
   <div class="aspect-video overflow-hidden rounded-md">
-    <Image
-      src={article.data.cover}
-      alt={article.data.covert_alt
-        ? article.data.covert_alt
-        : article.data.title}
-      layout="constrained"
-      loading={"eager"}
-    />
+    {
+      article.data.cover ? (
+        <Image
+          src={article.data.cover}
+          alt={
+            article.data.covert_alt
+              ? article.data.covert_alt
+              : article.data.title
+          }
+          layout="constrained"
+          loading="eager"
+          fetchpriority="high"
+        />
+      ) : article.data.coverUrl ? (
+        <img
+          src={article.data.coverUrl}
+          alt={
+            article.data.covert_alt
+              ? article.data.covert_alt
+              : article.data.title
+          }
+          loading="eager"
+          decoding="async"
+          fetchpriority="high"
+          class="w-full h-full object-cover"
+        />
+      ) : null
+    }
   </div>
   <div class="flex flex-col gap-2">
     <div>
@@ -46,7 +66,14 @@ const category = categoriesHandler.oneCategory(article.data.category.id);
       <span class="text-primary dark:text-secondary">{category.data.title}</span
       >
       <Divider />
-      <span>{getDateDistance(remarkPluginFrontmatter.lastModified)}</span>
+      <span
+        >{
+          getDateDistance(
+            remarkPluginFrontmatter.lastModified ||
+              normalizeDate(article.data.publishedTime)
+          )
+        }</span
+      >
     </div>
   </div>
 </article>

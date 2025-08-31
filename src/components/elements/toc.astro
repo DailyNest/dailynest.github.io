@@ -1,0 +1,162 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { SITE } from "@/lib/config";
+
+interface Props {
+  article: CollectionEntry<"articles">;
+  mode?: "mobile" | "desktop"; // mobile: collapsible; desktop: sticky sidebar
+}
+
+const { article, mode = "desktop" } = Astro.props as Props;
+const editUrl = `${SITE.github}/edit/main/src/content/articles/${article.id}/index.mdx`;
+---
+
+{
+  mode === "desktop" ? (
+    <aside data-toc-root class="hidden lg:block self-start">
+      <div class="sticky top-32 space-y-4 w-56 xl:w-64 max-h-[calc(100vh-8rem)] overflow-auto">
+        <nav aria-label="Table of contents" class="text-sm">
+          <h3 class="font-semibold mb-2">On this page</h3>
+          <ul data-toc-list class="space-y-1" />
+        </nav>
+        <div>
+          <a href={editUrl} class="btn btn-sm w-full btn-outline">
+            Edit this article
+          </a>
+        </div>
+      </div>
+    </aside>
+  ) : (
+    <div data-toc-root class="lg:hidden mb-4">
+      <details class="bg-base-200/40 rounded-md">
+        <summary class="cursor-pointer py-3 px-4 font-semibold">
+          On this page
+        </summary>
+        <div class="p-4 pt-2 space-y-3">
+          <nav aria-label="Table of contents" class="text-sm">
+            <ul data-toc-list class="space-y-1" />
+          </nav>
+          <div>
+            <a href={editUrl} class="btn btn-xs btn-outline">
+              Edit this article
+            </a>
+          </div>
+        </div>
+      </details>
+    </div>
+  )
+}
+
+<script is:inline>
+  const buildTOC = () => {
+    const contentRoot =
+      document.querySelector("article[data-pagefind-body]") ||
+      document.querySelector("article.prose");
+    if (!contentRoot) return;
+    const headings = Array.from(contentRoot.querySelectorAll("h2, h3"));
+    const roots = Array.from(document.querySelectorAll("[data-toc-root]"));
+    if (roots.length === 0) return;
+
+    roots.forEach((root) => {
+      const list = root.querySelector("[data-toc-list]");
+      if (!list) return;
+      list.innerHTML = "";
+
+      if (headings.length === 0) {
+        list.innerHTML = '<li class="text-base-content/60">No sections</li>';
+        return;
+      }
+
+      const items = headings.map((h) => {
+        if (!h.id)
+          h.id = h.textContent
+            .trim()
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, "-")
+            .replace(/^-|-$/g, "");
+        const li = document.createElement("li");
+        li.className = h.tagName === "H3" ? "ml-3" : "";
+        const a = document.createElement("a");
+        a.href = `#${h.id}`;
+        a.textContent = h.textContent;
+        a.className = "block py-1 hover:underline";
+        li.appendChild(a);
+        list.appendChild(li);
+        return { id: h.id, el: a };
+      });
+
+      const clearActive = () => {
+        items.forEach((i) => {
+          i.el.classList.remove("text-primary", "font-semibold");
+          i.el.removeAttribute("aria-current");
+        });
+      };
+
+      const setActive = (id) => {
+        clearActive();
+        const item = items.find((i) => i.id === id);
+        if (item) {
+          item.el.classList.add("text-primary", "font-semibold");
+          item.el.setAttribute("aria-current", "true");
+        }
+      };
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          let candidate = null;
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              const id = entry.target.id;
+              // Prefer the entry closest to the top
+              if (
+                !candidate ||
+                entry.boundingClientRect.top < candidate.boundingClientRect.top
+              ) {
+                candidate = entry;
+              }
+            }
+          });
+          if (candidate) setActive(candidate.target.id);
+        },
+        { rootMargin: "0px 0px -60% 0px", threshold: [0] }
+      );
+
+      headings.forEach((h) => observer.observe(h));
+
+      const onScroll = () => {
+        const offset = 140; // approximate header/sticky offset
+        let idx = -1;
+        for (let i = 0; i < headings.length; i++) {
+          const top = headings[i].getBoundingClientRect().top;
+          if (top - offset <= 0) idx = i;
+          else break;
+        }
+        const activeId = idx >= 0 ? headings[idx].id : headings[0]?.id;
+        if (activeId) setActive(activeId);
+      };
+      window.addEventListener("scroll", onScroll, { passive: true });
+      // Initialize once on build
+      onScroll();
+
+      // If mobile <details>, close after clicking a link
+      const details = root.querySelector("details");
+      if (details) {
+        list.addEventListener("click", (e) => {
+          const target = e.target;
+          if (target && target.tagName === "A") {
+            details.open = false;
+          }
+        });
+      }
+    });
+  };
+
+  const initTOC = () => buildTOC();
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initTOC, { once: true });
+  } else {
+    initTOC();
+  }
+  document.addEventListener("astro:page-load", initTOC);
+  document.addEventListener("astro:after-swap", initTOC);
+</script>

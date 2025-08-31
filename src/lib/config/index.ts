@@ -75,6 +75,7 @@ export const OTHER_LINKS: Link[] = [
     href: "/cookie-policy",
     text: "Cookie Policy",
   },
+  { href: "/faq", text: "FAQ" },
   { href: "/rss.xml", text: "RSS" },
   { href: "/sitemap-index.xml", text: "Sitemap" },
 ];

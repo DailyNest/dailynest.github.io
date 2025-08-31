@@ -2,7 +2,7 @@ import { getCollection } from "astro:content";
 
 const articlesCollection = (
   await getCollection("articles", ({ data }) => {
-    return data.isDraft !== true && new Date(data.publishedTime) < new Date();
+    return data.isDraft !== true;
   })
 ).sort((a, b) =>
   new Date(b.data.publishedTime)

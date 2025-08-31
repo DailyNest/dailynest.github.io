@@ -13,9 +13,10 @@ import Share from "@/components/elements/share.astro";
 type Props = {
   article: CollectionEntry<"articles">;
   readingTime: string;
+  lastModified?: string | null;
 };
 
-const { article, readingTime } = Astro.props;
+const { article, readingTime, lastModified } = Astro.props;
 
 const category = categoriesHandler.oneCategory(article.data.category.id);
 const authors = authorsHandler.getAuthors(article.data.authors);
@@ -27,14 +28,37 @@ const authors = authorsHandler.getAuthors(article.data.authors);
   <div
     class="container px-0 max-w-5xl lg:mt-4 overflow-hidden aspect-[20/9] lg:rounded-md"
   >
-    <Picture
-      src={article.data.cover}
-      alt="article"
-      layout="full-width"
-      loading={"eager"}
-      formats={["avif", "webp"]}
-      class="w-full h-full object-center"
-    />
+    {
+      article.data.cover ? (
+        <Picture
+          src={article.data.cover}
+          alt={
+            article.data.covert_alt
+              ? article.data.covert_alt
+              : article.data.title
+          }
+          layout="full-width"
+          loading={"eager"}
+          formats={["avif", "webp"]}
+          class="w-full h-full object-center"
+        />
+      ) : article.data.coverUrl ? (
+        <img
+          src={article.data.coverUrl}
+          alt={
+            article.data.covert_alt
+              ? article.data.covert_alt
+              : article.data.title
+          }
+          loading="eager"
+          decoding="async"
+          fetchpriority="high"
+          width="1600"
+          height="720"
+          class="w-full h-full object-cover"
+        />
+      ) : null
+    }
   </div>
   <div class="container my-4 max-w-5xl lg:hidden flex items-center gap-2">
     <ResourcesAdd size="16" />
@@ -72,6 +96,28 @@ const authors = authorsHandler.getAuthors(article.data.authors);
             }</time
           >
         </span>
+        {
+          lastModified && (
+            <>
+              <Divider />
+              <span class="flex items-center gap-1">
+                <Time04 size="15" />
+                <time
+                  class="hidden lg:block"
+                  datetime={normalizeDate(lastModified)}
+                >
+                  Updated {formatDate(normalizeDate(lastModified), "long")}
+                </time>
+                <time
+                  class="block lg:hidden"
+                  datetime={normalizeDate(lastModified)}
+                >
+                  Upd {formatDate(normalizeDate(lastModified), "short")}
+                </time>
+              </span>
+            </>
+          )
+        }
         <Divider />
         <span class="flex items-center gap-1">
           <Time04 size="15" />
@@ -121,7 +167,9 @@ const authors = authorsHandler.getAuthors(article.data.authors);
             ))
           }
         </div>
-        <Share text={article.data.title} />
+        <div class="flex items-center gap-2">
+          <Share text={article.data.title} />
+        </div>
       </div>
     </div>
   </div>

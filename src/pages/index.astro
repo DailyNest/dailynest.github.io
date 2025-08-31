@@ -4,6 +4,7 @@ import { getEntry } from "astro:content";
 import Headlines from "@/pages/_home/headlines.astro";
 import LatestNews from "@/pages/_home/latestNews.astro";
 import Authors from "@/pages/_home/authors.astro";
+import HeaderSection from "@/pages/_home/headerSection.astro";
 
 const entry = await getEntry("views", "home");
 
@@ -13,6 +14,12 @@ if (!entry) {
 ---
 
 <BaseLayout entry={entry}>
+  <section class="container pt-6" data-pagefind-ignore="all">
+    <HeaderSection title="DailyNest" />
+    <p class="mt-2 text-base text-base-content/80">
+      {entry.data.description}
+    </p>
+  </section>
   <Headlines />
   <LatestNews />
   <Authors />

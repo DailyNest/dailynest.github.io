@@ -1,0 +1,78 @@
+---
+const env = import.meta.env;
+
+const repo = env.PUBLIC_GISCUS_REPO; // e.g. "DailyNest/dailynest.github.io"
+const repoId = env.PUBLIC_GISCUS_REPO_ID; // GitHub repo ID
+const category = env.PUBLIC_GISCUS_CATEGORY; // e.g. "Comments"
+const categoryId = env.PUBLIC_GISCUS_CATEGORY_ID; // GitHub discussion category ID
+const mapping = env.PUBLIC_GISCUS_MAPPING || "pathname"; // recommended: pathname
+const strict = env.PUBLIC_GISCUS_STRICT || "1"; // "1" or "0"
+const reactions = env.PUBLIC_GISCUS_REACTIONS_ENABLED || "1"; // "1" or "0"
+const emitMeta = env.PUBLIC_GISCUS_EMIT_METADATA || "0"; // "1" or "0"
+const inputPos = env.PUBLIC_GISCUS_INPUT_POSITION || "bottom"; // "top" | "bottom"
+const theme = env.PUBLIC_GISCUS_THEME || "preferred_color_scheme"; // auto by default
+const lang = env.PUBLIC_GISCUS_LANG || "en";
+---
+
+{
+  repo && repoId && category && categoryId ? (
+    <section
+      class="container max-w-3xl mt-8 mb-12 pb-4"
+      data-pagefind-ignore="all"
+    >
+      <h2 class="text-lg font-semibold mb-3">Comments</h2>
+      <script
+        src="https://giscus.app/client.js"
+        data-repo={repo}
+        data-repo-id={repoId}
+        data-category={category}
+        data-category-id={categoryId}
+        data-mapping={mapping}
+        data-strict={strict}
+        data-reactions-enabled={reactions}
+        data-emit-metadata={emitMeta}
+        data-input-position={inputPos}
+        data-theme={theme}
+        data-lang={lang}
+        data-loading="lazy"
+        crossorigin="anonymous"
+        async
+      />
+      <noscript class="text-sm text-base-content/70">
+        Enable JavaScript to view comments powered by Giscus.
+      </noscript>
+    </section>
+  ) : null
+}
+<script is:inline>
+  // Keep Giscus theme in sync with site theme so counts like “0 comments”/“0 reactions” have proper contrast.
+  function giscusThemeFor(siteTheme) {
+    // Use transparent dark to blend with page bg when dark; light for light mode
+    return siteTheme === "dark" ? "transparent_dark" : "light";
+  }
+  function getSiteTheme() {
+    return (
+      document.documentElement.getAttribute("data-theme") ||
+      localStorage.getItem("astro-theme") ||
+      "light"
+    );
+  }
+  function setGiscusTheme() {
+    const iframe = document.querySelector("iframe.giscus-frame");
+    if (!iframe) return;
+    const theme = giscusThemeFor(getSiteTheme());
+    iframe.contentWindow?.postMessage(
+      { giscus: { setConfig: { theme } } },
+      "https://giscus.app"
+    );
+  }
+  // Apply after page load and on theme toggles
+  document.addEventListener("astro:page-load", () =>
+    setTimeout(setGiscusTheme, 0)
+  );
+  const mo = new MutationObserver(() => setTimeout(setGiscusTheme, 0));
+  mo.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ["data-theme"],
+  });
+</script>

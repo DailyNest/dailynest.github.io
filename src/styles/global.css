@@ -55,6 +55,11 @@
       }
     }
   }
+  /* Ensure anchored headings are visible below the fixed header */
+  .prose h2,
+  .prose h3 {
+    scroll-margin-top: 6rem;
+  }
 }
 
 @utility container {
