@@ -9,6 +9,7 @@ import keystatic from "@keystatic/astro";
 import react from "@astrojs/react";
 import { loadEnv } from "vite";
 import pagefind from "astro-pagefind";
+import rehypeShiftHeading from "rehype-shift-heading";
 
 const { RUN_KEYSTATIC } = loadEnv(import.meta.env.MODE, process.cwd(), "");
 
@@ -26,6 +27,7 @@ export default defineConfig({
   base: SITE.basePath,
   markdown: {
     remarkPlugins: [readingTime, modifiedTime],
+    rehypePlugins: [rehypeShiftHeading],
   },
   image: {
     responsiveStyles: true,

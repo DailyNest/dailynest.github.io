@@ -49,8 +49,8 @@ const OGImage = new URL(meta.ogImage, Astro.url).href;
   <link rel="canonical" href={meta.canonical || canonicalURL} />
 
   <!-- Page Metadata -->
-  <title>{`${meta.title} - Technology, Programming & Lifestyle`}</title>
-  <meta name="title" content={`${meta.metaTitle} - Technology, Programming & Lifestyle`} />
+  <title>{isArticleMeta(meta) || Astro.url.pathname.includes('/authors/') ? meta.title : Astro.url.pathname.includes('/categories/') ? `${Astro.url.pathname.split('/')[2].charAt(0).toUpperCase() + Astro.url.pathname.split('/')[2].slice(1)} Articles | ${SITE.title}` : `${meta.title} - Technology, Programming & Lifestyle`}</title>
+  <meta name="title" content={isArticleMeta(meta) || Astro.url.pathname.includes('/authors/') ? meta.metaTitle : Astro.url.pathname.includes('/categories/') ? `${Astro.url.pathname.split('/')[2].charAt(0).toUpperCase() + Astro.url.pathname.split('/')[2].slice(1)} Articles` : `${meta.metaTitle} - Technology, Programming & Lifestyle`} />
   <meta name="description" content={meta.description} />
   {meta.robots ? <meta name="robots" content={meta.robots} /> : null}
   {
@@ -73,7 +73,7 @@ const OGImage = new URL(meta.ogImage, Astro.url).href;
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content={meta.type} />
   <meta property="og:url" content={canonicalURL} />
-  <meta property="og:title" content={`DailyNest - ${meta.metaTitle}`} />
+  <meta property="og:title" content={isArticleMeta(meta) || Astro.url.pathname.includes('/authors/') ? meta.title : Astro.url.pathname.includes('/categories/') ? `${Astro.url.pathname.split('/')[2].charAt(0).toUpperCase() + Astro.url.pathname.split('/')[2].slice(1)} Articles | ${SITE.title}` : `${meta.title} - Technology, Programming & Lifestyle`} />
   <meta property="og:description" content={meta.description} />
   <meta property="og:image" content={OGImage} />
   <meta property="og:image:alt" content={meta.ogImageAlt} />
@@ -82,7 +82,7 @@ const OGImage = new URL(meta.ogImage, Astro.url).href;
   <meta property="twitter:site" content={Astro.site} />
   <meta property="twitter:card" content="summary_large_image" />
   <meta property="twitter:url" content={canonicalURL} />
-  <meta property="twitter:title" content={`DailyNest - ${meta.metaTitle}`} />
+  <meta property="twitter:title" content={isArticleMeta(meta) || Astro.url.pathname.includes('/authors/') ? meta.title : Astro.url.pathname.includes('/categories/') ? `${Astro.url.pathname.split('/')[2].charAt(0).toUpperCase() + Astro.url.pathname.split('/')[2].slice(1)} Articles | ${SITE.title}` : `${meta.title} - Technology, Programming & Lifestyle`} />
   <meta property="twitter:description" content={meta.description} />
   <meta property="twitter:image" content={OGImage} />
   <meta property="twitter:image:alt" content={meta.ogImageAlt} />
