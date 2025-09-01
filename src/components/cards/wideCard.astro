@@ -2,6 +2,7 @@
 import { Image } from "astro:assets";
 import type { CollectionEntry } from "astro:content";
 import { getDateDistance, normalizeDate } from "@/lib/utils/date";
+import { articlePermalink } from "@/lib/utils/permalinks";
 import Divider from "../bases/divider.astro";
 
 type Props = {
@@ -57,7 +58,7 @@ const { article, isLast } = Astro.props;
     </div>
     <div class="flex-1 space-y-2">
       <h3 class="text-xl font-semibold lg:group-hover:underline">
-        <a href={`/articles/${article.id}`}>
+        <a href={articlePermalink(article)}>
           <span class="absolute inset-0 z-10"></span>
           {article.data.title}
         </a>

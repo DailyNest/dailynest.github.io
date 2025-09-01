@@ -5,6 +5,7 @@ import type { ArticleMeta, Meta } from "@/lib/types";
 import { capitalizeFirstLetter } from "@/lib/utils/letter";
 import { normalizeDate } from "@/lib/utils/date";
 import { SITE } from "@/lib/config";
+import { articlePermalink } from "@/lib/utils/permalinks";
 
 type GetMetaCollection = CollectionEntry<"articles" | "views">;
 
@@ -47,8 +48,8 @@ export const getMeta = async (
           link: `${author.id}`,
         })),
         type: "article",
-  url: `${SITE.url}/articles/${collection.id}/`,
-  canonical: `${SITE.url}/articles/${collection.id}/`,
+  url: `${SITE.url}${articlePermalink(collection as any)}`,
+  canonical: `${SITE.url}${articlePermalink(collection as any)}`,
   lang: SITE.locale,
   publisher: SITE.title,
         keywords: Array.isArray(collection.data.keywords)

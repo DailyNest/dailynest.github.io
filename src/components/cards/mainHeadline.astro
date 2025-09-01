@@ -5,6 +5,7 @@ import { render } from "astro:content";
 import Divider from "@/components/bases/divider.astro";
 import { categoriesHandler } from "@/lib/handlers/categories";
 import { getDateDistance, normalizeDate } from "@/lib/utils/date";
+import { articlePermalink } from "@/lib/utils/permalinks";
 
 type Props = {
   article: CollectionEntry<"articles">;
@@ -53,7 +54,7 @@ const category = categoriesHandler.oneCategory(article.data.category.id);
       <h2
         class="text-xl font-semibold lg:group-hover:underline underline-offset-2"
       >
-        <a href={`/articles/${article.id}`}>
+        <a href={articlePermalink(article)}>
           <span class="absolute inset-0 z-10 pointer-events-none"></span>
           {article.data.title}
         </a>

@@ -8,7 +8,8 @@ import {
 } from "@/lib/schema";
 
 const articleCollection = defineCollection({
-  loader: glob({ pattern: "**/*.mdx", base: "./src/content/articles" }),
+  // Only include two-level article paths like YYYY-MM-DD/slug/index.mdx
+  loader: glob({ pattern: "*/*/index.mdx", base: "./src/content/articles" }),
   schema: ({ image }) => articleSchema(image),
 });
 
