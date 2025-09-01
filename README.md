@@ -61,10 +61,8 @@ bun dev
 - Sitemap
 - Dark Mode
 - SEO Optimization (~)
+- Open Graph Image Generation
 
-### Upcoming Features
-
-- Open Graph (OG) Image Generation
 
 ## 💻 Technologies
 

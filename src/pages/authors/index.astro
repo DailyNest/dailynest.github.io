@@ -4,6 +4,7 @@ import Info from "@/assets/svgs/info.astro";
 import AuthorCard from "@/components/cards/authorCard.astro";
 import ListLayout from "@/layouts/list.astro";
 import { authorsHandler } from "@/lib/handlers/authors";
+import { SITE } from "@/lib/config";
 
 const entry = await getEntry("views", "authors");
 
@@ -17,6 +18,65 @@ const [HEADER, ATTENTION] = entry.data.blocks;
 ---
 
 <ListLayout header={HEADER.title} entry={entry}>
+  <!-- Organization and CollectionPage schema for authors index -->
+  <script type="application/ld+json">
+    {JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'CollectionPage',
+      name: `${HEADER.title} - ${SITE.title}`,
+      description: 'Meet our team of writers and contributors who create quality content on technology, programming, and personal development.',
+      url: `${SITE.url}/authors`,
+      mainEntity: {
+        '@type': 'Organization',
+        name: SITE.title,
+        description: SITE.description,
+        url: SITE.url,
+        logo: `${SITE.url}/favicon.svg`,
+        sameAs: [
+          SITE.github
+        ],
+        founder: {
+          '@type': 'Person',
+          name: SITE.author
+        },
+        description: SITE.description,
+        publishingPrinciples: `${SITE.url}/about`,
+        ethicsPolicy: `${SITE.url}/privacy`,
+        mission: 'Providing quality content on technology, programming, and personal development',
+        member: authors.map(author => ({
+          '@type': 'Person',
+          name: author.data.name,
+          jobTitle: author.data.job,
+          description: author.data.bio,
+          url: `${SITE.url}/authors/${author.id}`,
+          image: author.data.avatar?.src
+            ? new URL(author.data.avatar.src, SITE.url).href
+            : author.data.avatarUrl || undefined,
+          sameAs: Array.isArray(author.data.social) && author.data.social.length > 0
+            ? author.data.social.map((social) => social.url)
+            : []
+        }))
+      },
+      breadcrumb: {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          {
+            '@type': 'ListItem',
+            position: 1,
+            name: 'Home',
+            item: SITE.url
+          },
+          {
+            '@type': 'ListItem',
+            position: 2,
+            name: 'Authors',
+            item: `${SITE.url}/authors`
+          }
+        ]
+      }
+    })}
+  </script>
+
   <section role="alert" class="alert alert-info mb-4 bg-info/60">
     <Info size="16" />
     <span>{ATTENTION.description}</span>

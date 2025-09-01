@@ -49,8 +49,8 @@ const OGImage = new URL(meta.ogImage, Astro.url).href;
   <link rel="canonical" href={meta.canonical || canonicalURL} />
 
   <!-- Page Metadata -->
-  <title>{meta.title}</title>
-  <meta name="title" content={meta.metaTitle} />
+  <title>{`${meta.title} - Technology, Programming & Lifestyle`}</title>
+  <meta name="title" content={`${meta.metaTitle} - Technology, Programming & Lifestyle`} />
   <meta name="description" content={meta.description} />
   {meta.robots ? <meta name="robots" content={meta.robots} /> : null}
   {
@@ -73,7 +73,7 @@ const OGImage = new URL(meta.ogImage, Astro.url).href;
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content={meta.type} />
   <meta property="og:url" content={canonicalURL} />
-  <meta property="og:title" content={meta.metaTitle} />
+  <meta property="og:title" content={`DailyNest - ${meta.metaTitle}`} />
   <meta property="og:description" content={meta.description} />
   <meta property="og:image" content={OGImage} />
   <meta property="og:image:alt" content={meta.ogImageAlt} />
@@ -82,7 +82,7 @@ const OGImage = new URL(meta.ogImage, Astro.url).href;
   <meta property="twitter:site" content={Astro.site} />
   <meta property="twitter:card" content="summary_large_image" />
   <meta property="twitter:url" content={canonicalURL} />
-  <meta property="twitter:title" content={meta.metaTitle} />
+  <meta property="twitter:title" content={`DailyNest - ${meta.metaTitle}`} />
   <meta property="twitter:description" content={meta.description} />
   <meta property="twitter:image" content={OGImage} />
   <meta property="twitter:image:alt" content={meta.ogImageAlt} />
@@ -116,7 +116,7 @@ const OGImage = new URL(meta.ogImage, Astro.url).href;
           {JSON.stringify({
             '@context': 'https://schema.org',
             '@type': 'Article',
-            headline: meta.metaTitle,
+            headline: `DailyNest - ${meta.metaTitle}`,
             description: meta.description,
             image: [OGImage],
             datePublished: new Date(meta.publishedTime).toISOString(),

@@ -6,6 +6,7 @@ import { capitalizeFirstLetter } from "@/lib/utils/letter";
 import { normalizeDate } from "@/lib/utils/date";
 import { SITE } from "@/lib/config";
 import { articlePermalink } from "@/lib/utils/permalinks";
+import { getOGImageForCollection } from "@/lib/utils/ogImage";
 
 type GetMetaCollection = CollectionEntry<"articles" | "views">;
 
@@ -27,11 +28,12 @@ export const getMeta = async (
       const { remarkPluginFrontmatter } = await render(collection);
       const authors = authorsHandler.getAuthors(collection.data.authors);
 
-      const ogImage = collection.data.cover
-        ? collection.data.cover.src
-        : collection.data.coverUrl
-          ? collection.data.coverUrl
-          : defaultImage.src;
+      // Generate OG image - use custom if available, otherwise generate dynamic
+      const ogImage = getOGImageForCollection(
+        collection,
+        collection.data.title,
+        collection.data.description || SITE.description
+      );
 
       const ogImageAlt = collection.data.covert_alt || collection.data.title;
 
@@ -79,7 +81,11 @@ export const getMeta = async (
         title,
   metaTitle: capitalizeFirstLetter(collection.data.title),
   description: collection.data.description || SITE.description,
-        ogImage: defaultImage.src,
+        ogImage: getOGImageForCollection(
+          collection,
+          capitalizeFirstLetter(collection.data.title),
+          collection.data.description || SITE.description
+        ),
         ogImageAlt: SITE.title,
         type: "website",
         url: SITE.url,

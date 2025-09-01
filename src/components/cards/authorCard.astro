@@ -1,6 +1,9 @@
 ---
 import { Image } from "astro:assets";
 import type { CollectionEntry } from "astro:content";
+import Github from "@/assets/svgs/github.astro";
+import Search from "@/assets/svgs/search-01.astro";
+
 type Props = {
   author: CollectionEntry<"authors">;
 };
@@ -41,5 +44,31 @@ const { author } = Astro.props;
       </a>
     </h3>
     <p class="text-sm text-primary dark:text-secondary">{author.data.job}</p>
+
+    <!-- Social Links for Muhammad Fiaz -->
+    {
+      author.id === "muhammadfiaz" && (
+        <div class="flex gap-2 mt-2">
+          <a
+            href="https://muhammadfiaz.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-base-200 hover:bg-base-300 transition-colors"
+            title="Website"
+          >
+            <Search size="14" />
+          </a>
+          <a
+            href="https://github.com/muhammad-fiaz"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-base-200 hover:bg-base-300 transition-colors"
+            title="GitHub"
+          >
+            <Github size="14" />
+          </a>
+        </div>
+      )
+    }
   </div>
 </li>
