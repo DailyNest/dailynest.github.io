@@ -154,4 +154,20 @@ const OGImage = new URL(meta.ogImage, Astro.url).href;
   }
 
   <ClientRouter />
+  <script is:inline>
+    // Register service worker at site root if available
+    (function registerSW() {
+      if (typeof window === 'undefined') return;
+      if (!('serviceWorker' in navigator)) return;
+      try {
+        // register from absolute path to avoid route-relative 404s
+        navigator.serviceWorker.register('/sw.js').catch((err) => {
+          // swallow registration errors in dev
+          console.warn('Service worker registration failed:', err);
+        });
+      } catch (e) {
+        // ignore
+      }
+    })();
+  </script>
 </head>

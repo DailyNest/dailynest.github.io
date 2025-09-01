@@ -58,18 +58,52 @@ const lang = env.PUBLIC_GISCUS_LANG || "en";
     );
   }
   function setGiscusTheme() {
-    const iframe = document.querySelector("iframe.giscus-frame");
-    if (!iframe) return;
-    const theme = giscusThemeFor(getSiteTheme());
-    iframe.contentWindow?.postMessage(
-      { giscus: { setConfig: { theme } } },
-      "https://giscus.app"
-    );
+    // try to find the giscus iframe by class or by src containing giscus.app
+    const findIframe = () =>
+      document.querySelector("iframe.giscus-frame") ||
+      Array.from(document.querySelectorAll("iframe")).find((f) =>
+        (f.getAttribute("src") || "").includes("giscus.app")
+      );
+
+    const iframe = findIframe();
+    if (!iframe) return; // we'll retry from caller
+
+    // If iframe isn't loaded yet, attach onload to send theme when ready
+    const sendTheme = () => {
+      if (!iframe.contentWindow) return;
+      const theme = giscusThemeFor(getSiteTheme());
+      const msg = { giscus: { setConfig: { theme } } };
+      try {
+        const src = iframe.getAttribute("src") || "";
+        const origin = src ? new URL(src, window.location.href).origin : "*";
+        iframe.contentWindow.postMessage(msg, origin);
+      } catch (err) {
+        try {
+          iframe.contentWindow.postMessage(msg, "*");
+        } catch (e) {
+          // ignore
+        }
+      }
+    };
+
+    if (iframe.complete || iframe.readyState === "complete") {
+      sendTheme();
+    } else {
+      // Some giscus iframes don't surface load events reliably; attempt both
+      iframe.addEventListener("load", sendTheme, { once: true });
+      // also schedule a short delayed attempt in case load already fired
+      setTimeout(sendTheme, 300);
+    }
   }
   // Apply after page load and on theme toggles
-  document.addEventListener("astro:page-load", () =>
-    setTimeout(setGiscusTheme, 0)
-  );
+  // Send theme after page load; if iframe isn't present yet, retry a few times
+  document.addEventListener("astro:page-load", () => {
+    setTimeout(() => setGiscusTheme(), 0);
+    // retry a couple times to handle async iframe injection
+    setTimeout(() => setGiscusTheme(), 500);
+    setTimeout(() => setGiscusTheme(), 1500);
+  });
+
   const mo = new MutationObserver(() => setTimeout(setGiscusTheme, 0));
   mo.observe(document.documentElement, {
     attributes: true,
