@@ -25,25 +25,28 @@ jobs:
         with:
           node-version: '20'
 
-      # 3. Install dependencies and build site
+      # 3. Create .env file with Giscus secrets
+      - name: Create .env file
+        run: |
+          echo "PUBLIC_GISCUS_REPO=${{ secrets.PUBLIC_GISCUS_REPO }}" >> .env
+          echo "PUBLIC_GISCUS_REPO_ID=${{ secrets.PUBLIC_GISCUS_REPO_ID }}" >> .env
+          echo "PUBLIC_GISCUS_CATEGORY=${{ secrets.PUBLIC_GISCUS_CATEGORY }}" >> .env
+          echo "PUBLIC_GISCUS_CATEGORY_ID=${{ secrets.PUBLIC_GISCUS_CATEGORY_ID }}" >> .env
+          echo "PUBLIC_GISCUS_MAPPING=${{ secrets.PUBLIC_GISCUS_MAPPING }}" >> .env
+          echo "PUBLIC_GISCUS_STRICT=${{ secrets.PUBLIC_GISCUS_STRICT }}" >> .env
+          echo "PUBLIC_GISCUS_REACTIONS_ENABLED=${{ secrets.PUBLIC_GISCUS_REACTIONS_ENABLED }}" >> .env
+          echo "PUBLIC_GISCUS_EMIT_METADATA=${{ secrets.PUBLIC_GISCUS_EMIT_METADATA }}" >> .env
+          echo "PUBLIC_GISCUS_INPUT_POSITION=${{ secrets.PUBLIC_GISCUS_INPUT_POSITION }}" >> .env
+          echo "PUBLIC_GISCUS_THEME=${{ secrets.PUBLIC_GISCUS_THEME }}" >> .env
+          echo "PUBLIC_GISCUS_LANG=${{ secrets.PUBLIC_GISCUS_LANG }}" >> .env
+
+      # 4. Install dependencies and build site
       - name: Install dependencies and build site
         run: |
           npm install
           npm run build
-        env:
-          VITE_GISCUS_REPO: ${{ secrets.PUBLIC_GISCUS_REPO }}
-          VITE_GISCUS_REPO_ID: ${{ secrets.PUBLIC_GISCUS_REPO_ID }}
-          VITE_GISCUS_CATEGORY: ${{ secrets.PUBLIC_GISCUS_CATEGORY }}
-          VITE_GISCUS_CATEGORY_ID: ${{ secrets.PUBLIC_GISCUS_CATEGORY_ID }}
-          VITE_GISCUS_MAPPING: ${{ secrets.PUBLIC_GISCUS_MAPPING }}
-          VITE_GISCUS_STRICT: ${{ secrets.PUBLIC_GISCUS_STRICT }}
-          VITE_GISCUS_REACTIONS_ENABLED: ${{ secrets.PUBLIC_GISCUS_REACTIONS_ENABLED }}
-          VITE_GISCUS_EMIT_METADATA: ${{ secrets.PUBLIC_GISCUS_EMIT_METADATA }}
-          VITE_GISCUS_INPUT_POSITION: ${{ secrets.PUBLIC_GISCUS_INPUT_POSITION }}
-          VITE_GISCUS_THEME: ${{ secrets.PUBLIC_GISCUS_THEME }}
-          VITE_GISCUS_LANG: ${{ secrets.PUBLIC_GISCUS_LANG }}
 
-      # 4. Upload the built site to GitHub Pages (Astro Action)
+      # 5. Upload the built site to GitHub Pages (Astro Action)
       - name: Upload the built site to GitHub Pages
         uses: withastro/action@v3
         with:
@@ -54,9 +57,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-
