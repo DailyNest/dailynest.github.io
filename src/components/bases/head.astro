@@ -7,6 +7,7 @@ import "@fontsource-variable/source-serif-4";
 import { ClientRouter } from "astro:transitions";
 import { SITE } from "@/lib/config";
 import type { ArticleMeta, Meta } from "@/lib/types";
+import { GOOGLE_CONFIG, getGATagConfig, getGTMContainerId, hasGoogleAnalytics, hasGoogleTagManager, hasGoogleAdSense } from "@/utils/google-config";
 
 type Props = {
   meta: Meta | ArticleMeta;
@@ -27,8 +28,8 @@ const OGImage = new URL(meta.ogImage, Astro.url).href;
   <meta charset={SITE.charset} />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <meta name="generator" content={Astro.generator} />
-  {import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION && (
-    <meta name="google-site-verification" content={import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION} />
+  {GOOGLE_CONFIG.SITE_VERIFICATION && (
+    <meta name="google-site-verification" content={GOOGLE_CONFIG.SITE_VERIFICATION} />
   )}
   <!-- Favicons -->
   <link rel="icon" type="image/png" href="/favicon.png" sizes="96x96" />
@@ -39,13 +40,13 @@ const OGImage = new URL(meta.ogImage, Astro.url).href;
   <link rel="manifest" href="/site.webmanifest" />
 
   <!-- Google AdSense -->
-  {import.meta.env.PUBLIC_GOOGLE_ADSENSE_CLIENT_ID && (
-    <script async src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${import.meta.env.PUBLIC_GOOGLE_ADSENSE_CLIENT_ID}`}
+  {hasGoogleAdSense() && (
+    <script async src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${GOOGLE_CONFIG.ADSENSE_CLIENT_ID}`}
        crossorigin="anonymous"></script>
   )}
 
   <!-- Google Consent Mode v2 -->
-  {import.meta.env.PUBLIC_GOOGLE_ADSENSE_CLIENT_ID && (
+  {hasGoogleAdSense() && (
     <script is:inline>
       // Initialize Google Consent Mode v2
       window.dataLayer = window.dataLayer || [];
@@ -65,26 +66,26 @@ const OGImage = new URL(meta.ogImage, Astro.url).href;
   )}
 
   <!-- Google Tag Manager -->
-  {import.meta.env.PUBLIC_GTM_ID && (
-    <script is:inline>
+  {hasGoogleTagManager() && (
+    <script is:inline define:vars={{ gtmId: GOOGLE_CONFIG.GTM_ID }}>
       (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
       new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
       j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-      })(window,document,'script','dataLayer',import.meta.env.PUBLIC_GTM_ID);
+      })(window,document,'script','dataLayer', gtmId);
     </script>
   )}
 
   <!-- Google Analytics (gtag.js) -->
-  {import.meta.env.PUBLIC_GA_MEASUREMENT_ID && (
+  {hasGoogleAnalytics() && (
     <>
-      <script async src={`https://www.googletagmanager.com/gtag/js?id=${import.meta.env.PUBLIC_GA_MEASUREMENT_ID}`}></script>
-      <script is:inline>
+      <script async src={`https://www.googletagmanager.com/gtag/js?id=${GOOGLE_CONFIG.GA_MEASUREMENT_ID}`}></script>
+      <script is:inline define:vars={{ gaId: GOOGLE_CONFIG.GA_MEASUREMENT_ID }}>
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
 
-        gtag('config', import.meta.env.PUBLIC_GA_MEASUREMENT_ID);
+        gtag('config', gaId);
       </script>
     </>
   )}
