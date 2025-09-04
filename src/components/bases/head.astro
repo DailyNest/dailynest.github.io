@@ -27,7 +27,9 @@ const OGImage = new URL(meta.ogImage, Astro.url).href;
   <meta charset={SITE.charset} />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <meta name="generator" content={Astro.generator} />
-  <meta name="google-site-verification" content="Btn93rRtCcrevRnG_ZIhsYBGqJ1RqlH7kJBj7KyCEsg" />
+  {import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION && (
+    <meta name="google-site-verification" content={import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION} />
+  )}
   <!-- Favicons -->
   <link rel="icon" type="image/png" href="/favicon.png" sizes="96x96" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -35,6 +37,57 @@ const OGImage = new URL(meta.ogImage, Astro.url).href;
   <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png" />
   <meta name="apple-mobile-web-app-title" content="DailyNest" />
   <link rel="manifest" href="/site.webmanifest" />
+
+  <!-- Google AdSense -->
+  {import.meta.env.PUBLIC_GOOGLE_ADSENSE_CLIENT_ID && (
+    <script async src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${import.meta.env.PUBLIC_GOOGLE_ADSENSE_CLIENT_ID}`}
+       crossorigin="anonymous"></script>
+  )}
+
+  <!-- Google Consent Mode v2 -->
+  {import.meta.env.PUBLIC_GOOGLE_ADSENSE_CLIENT_ID && (
+    <script is:inline>
+      // Initialize Google Consent Mode v2
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      // Set default consent state (denied until user consents)
+      gtag('consent', 'default', {
+        'ad_storage': 'denied',
+        'ad_user_data': 'denied',
+        'ad_personalization': 'denied',
+        'analytics_storage': 'denied',
+        'functionality_storage': 'granted',
+        'security_storage': 'granted'
+      });
+    </script>
+  )}
+
+  <!-- Google Tag Manager -->
+  {import.meta.env.PUBLIC_GTM_ID && (
+    <script is:inline>
+      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+      'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+      })(window,document,'script','dataLayer',import.meta.env.PUBLIC_GTM_ID);
+    </script>
+  )}
+
+  <!-- Google Analytics (gtag.js) -->
+  {import.meta.env.PUBLIC_GA_MEASUREMENT_ID && (
+    <>
+      <script async src={`https://www.googletagmanager.com/gtag/js?id=${import.meta.env.PUBLIC_GA_MEASUREMENT_ID}`}></script>
+      <script is:inline>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', import.meta.env.PUBLIC_GA_MEASUREMENT_ID);
+      </script>
+    </>
+  )}
 
   <!-- RSS & Sitemap -->
   <link rel="sitemap" href="/sitemap-index.xml" />

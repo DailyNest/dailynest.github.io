@@ -1,0 +1,414 @@
+---
+// Cookie consent component for Google AdSense and general cookies
+---
+
+<div
+  id="cookie-consent"
+  class="fixed bottom-0 left-0 right-0 bg-base-100 border-t border-base-300 p-4 shadow-lg z-50 transform translate-y-full transition-transform duration-300"
+  style="display: none;"
+>
+  <div class="container mx-auto max-w-4xl">
+    <div class="flex flex-col md:flex-row items-start md:items-center gap-4">
+      <div class="flex-1 text-sm">
+        <h3 class="font-semibold text-base-content mb-2">
+          🍪 Cookie Preferences
+        </h3>
+        <p class="text-base-content/70 mb-2">
+          We use cookies to enhance your browsing experience and show
+          personalized ads through Google AdSense. Advertising and functional
+          cookies are required for website functionality. By continuing to use
+          our site, you agree to our use of cookies.
+        </p>
+        <div class="flex flex-wrap gap-4 text-xs text-base-content/60">
+          <span>📊 Analytics</span>
+          <span>🎯 Advertising</span>
+          <span>⚙️ Functional</span>
+        </div>
+      </div>
+      <div class="flex flex-col sm:flex-row gap-2">
+        <button id="reject-cookies" class="btn btn-outline btn-sm">
+          Reject All
+        </button>
+        <button id="accept-cookies" class="btn btn-primary btn-sm">
+          Accept All
+        </button>
+        <button
+          id="customize-cookies"
+          class="btn btn-ghost btn-sm transition-all duration-200"
+        >
+          <span class="inline-flex items-center gap-1">
+            Customize
+            <svg
+              id="customize-arrow"
+              class="w-3 h-3 transition-transform duration-200"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Customize options (hidden by default) -->
+    <div
+      id="cookie-options"
+      class="mt-4 pt-4 border-t border-base-300 hidden animate-fade-in"
+    >
+      <h4 class="font-medium text-base-content mb-3">
+        Choose your preferences:
+      </h4>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="flex items-start gap-3">
+          <input
+            type="checkbox"
+            id="analytics-cookies"
+            class="checkbox checkbox-sm"
+          />
+          <div>
+            <label
+              for="analytics-cookies"
+              class="font-medium text-sm cursor-pointer"
+              >Analytics Cookies</label
+            >
+            <p class="text-xs text-base-content/60 mt-1">
+              Help us understand how visitors interact with our website
+            </p>
+          </div>
+        </div>
+        <div class="flex items-start gap-3">
+          <input
+            type="checkbox"
+            id="advertising-cookies"
+            class="checkbox checkbox-sm"
+            checked
+            disabled
+          />
+          <div>
+            <label
+              for="advertising-cookies"
+              class="font-medium text-sm cursor-pointer opacity-60"
+              >Advertising Cookies (Required)</label
+            >
+            <p class="text-xs text-base-content/60 mt-1">
+              Required for Google AdSense functionality and website monetization
+            </p>
+          </div>
+        </div>
+        <div class="flex items-start gap-3">
+          <input
+            type="checkbox"
+            id="functional-cookies"
+            class="checkbox checkbox-sm"
+            checked
+            disabled
+          />
+          <div>
+            <label
+              for="functional-cookies"
+              class="font-medium text-sm cursor-pointer opacity-60"
+              >Functional Cookies (Required)</label
+            >
+            <p class="text-xs text-base-content/60 mt-1">
+              Essential for website functionality and your preferences
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="flex justify-end gap-2 mt-4">
+        <button id="cancel-customize" class="btn btn-ghost btn-sm">
+          Cancel
+        </button>
+        <button id="save-preferences" class="btn btn-primary btn-sm">
+          Save Preferences
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Declare gtag as a global function for TypeScript
+  declare global {
+    function gtag(...args: any[]): void;
+  }
+
+  // Cookie consent management
+  class CookieConsent {
+    private consentBanner: HTMLElement;
+    private optionsPanel: HTMLElement;
+
+    constructor() {
+      this.consentBanner = document.getElementById(
+        "cookie-consent"
+      ) as HTMLElement;
+      this.optionsPanel = document.getElementById(
+        "cookie-options"
+      ) as HTMLElement;
+      this.initialize();
+    }
+
+    initialize() {
+      // Check if user has already made a choice
+      const consent = this.getCookieConsent();
+
+      if (!consent) {
+        // Show banner if no consent given yet
+        this.showBanner();
+      }
+
+      // Always setup event listeners (for customize functionality)
+      this.setupEventListeners();
+
+      if (consent) {
+        // Apply existing preferences
+        this.applyConsent(consent);
+      }
+    }
+
+    showBanner() {
+      this.consentBanner.style.display = "block";
+      // Use setTimeout to ensure display is applied before transform
+      setTimeout(() => {
+        this.consentBanner.classList.remove("translate-y-full");
+      }, 100);
+    }
+
+    hideBanner() {
+      this.consentBanner.classList.add("translate-y-full");
+      setTimeout(() => {
+        this.consentBanner.style.display = "none";
+      }, 300);
+    }
+
+    setupEventListeners() {
+      // Accept all cookies
+      const acceptBtn = document.getElementById("accept-cookies");
+      if (acceptBtn) {
+        acceptBtn.addEventListener("click", () => {
+          const consent = {
+            analytics: true,
+            advertising: true, // Always true for AdSense
+            functional: true, // Always true for functionality
+            timestamp: Date.now(),
+          };
+          this.saveConsent(consent);
+          this.applyConsent(consent);
+          this.hideBanner();
+        });
+      }
+
+      // Reject all cookies (but advertising and functional remain enabled)
+      const rejectBtn = document.getElementById("reject-cookies");
+      if (rejectBtn) {
+        rejectBtn.addEventListener("click", () => {
+          const consent = {
+            analytics: false,
+            advertising: true, // Always true for AdSense (mandatory)
+            functional: true, // Always true for functionality (mandatory)
+            timestamp: Date.now(),
+          };
+          this.saveConsent(consent);
+          this.applyConsent(consent);
+          this.hideBanner();
+        });
+      }
+
+      // Show customize options
+      const customizeBtn = document.getElementById("customize-cookies");
+      const arrowIcon = document.getElementById("customize-arrow");
+      if (customizeBtn) {
+        customizeBtn.addEventListener("click", () => {
+          const isHidden = this.optionsPanel.classList.contains("hidden");
+          const textSpan = customizeBtn.querySelector("span");
+          if (isHidden) {
+            this.optionsPanel.classList.remove("hidden");
+            if (textSpan) {
+              textSpan.innerHTML =
+                'Hide Options <svg id="customize-arrow" class="w-3 h-3 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" style="transform: rotate(180deg);"></path></svg>';
+            }
+          } else {
+            this.optionsPanel.classList.add("hidden");
+            if (textSpan) {
+              textSpan.innerHTML =
+                'Customize <svg id="customize-arrow" class="w-3 h-3 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>';
+            }
+          }
+        });
+      }
+
+      // Cancel customize options
+      const cancelBtn = document.getElementById("cancel-customize");
+      if (cancelBtn) {
+        cancelBtn.addEventListener("click", () => {
+          this.optionsPanel.classList.add("hidden");
+          const customizeBtn = document.getElementById("customize-cookies");
+          if (customizeBtn) {
+            const textSpan = customizeBtn.querySelector("span");
+            if (textSpan) {
+              textSpan.innerHTML =
+                'Customize <svg id="customize-arrow" class="w-3 h-3 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>';
+            }
+          }
+        });
+      }
+
+      // Save custom preferences
+      const saveBtn = document.getElementById("save-preferences");
+      if (saveBtn) {
+        saveBtn.addEventListener("click", () => {
+          const analyticsCheckbox = document.getElementById(
+            "analytics-cookies"
+          ) as HTMLInputElement;
+
+          const consent = {
+            analytics: analyticsCheckbox?.checked ?? false,
+            advertising: true, // Always true for AdSense (mandatory)
+            functional: true, // Always true for functionality (mandatory)
+            timestamp: Date.now(),
+          };
+          this.saveConsent(consent);
+          this.applyConsent(consent);
+          this.hideBanner();
+        });
+      }
+    }
+
+    saveConsent(consent: any) {
+      localStorage.setItem("cookie-consent", JSON.stringify(consent));
+    }
+
+    getCookieConsent() {
+      const consent = localStorage.getItem("cookie-consent");
+      return consent ? JSON.parse(consent) : null;
+    }
+
+    applyConsent(consent: any) {
+      // Handle Google AdSense consent (always enabled for mandatory advertising)
+      this.enableAdSense();
+
+      // Handle analytics
+      if (consent.analytics) {
+        this.enableAnalytics();
+      } else {
+        this.disableAnalytics();
+      }
+
+      // Functional cookies are always enabled for basic functionality
+      this.enableFunctional();
+    }
+
+    enableAdSense() {
+      // Set AdSense consent
+      if (typeof gtag !== "undefined") {
+        gtag("consent", "update", {
+          ad_storage: "granted",
+          ad_user_data: "granted",
+          ad_personalization: "granted",
+        });
+      }
+    }
+
+    disableAdSense() {
+      // Revoke AdSense consent
+      if (typeof gtag !== "undefined") {
+        gtag("consent", "update", {
+          ad_storage: "denied",
+          ad_user_data: "denied",
+          ad_personalization: "denied",
+        });
+      }
+    }
+
+    enableAnalytics() {
+      // Enable analytics tracking
+      if (typeof gtag !== "undefined") {
+        gtag("consent", "update", {
+          analytics_storage: "granted",
+        });
+      }
+    }
+
+    disableAnalytics() {
+      // Disable analytics tracking
+      if (typeof gtag !== "undefined") {
+        gtag("consent", "update", {
+          analytics_storage: "denied",
+        });
+      }
+    }
+
+    enableFunctional() {
+      // Functional cookies are always enabled
+      if (typeof gtag !== "undefined") {
+        gtag("consent", "update", {
+          functionality_storage: "granted",
+          security_storage: "granted",
+        });
+      }
+    }
+  }
+
+  // Initialize cookie consent when DOM is loaded
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", () => {
+      new CookieConsent();
+    });
+  } else {
+    new CookieConsent();
+  }
+</script>
+
+<style>
+  /* Additional styles for better mobile experience */
+  @media (max-width: 640px) {
+    #cookie-consent {
+      padding: 1rem;
+    }
+
+    #cookie-consent .container {
+      max-width: 100%;
+    }
+  }
+
+  /* Smooth transitions */
+  #cookie-consent {
+    transition: transform 0.3s ease-in-out;
+  }
+
+  #cookie-consent.translate-y-full {
+    transform: translateY(100%);
+  }
+
+  /* Animate customize options */
+  #cookie-options {
+    transition: all 0.3s ease-in-out;
+    max-height: 0;
+    overflow: hidden;
+  }
+
+  #cookie-options:not(.hidden) {
+    max-height: 500px;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.3s ease-out;
+  }
+</style>
