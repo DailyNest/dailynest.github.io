@@ -41,9 +41,9 @@ bun dev
 
 3. Start the development server:
 
- ```bash
-    bun dev 
-  ```
+```bash
+   bun dev
+```
 
 4. Open `http://localhost:4321/keystatic` in your browser.
 
@@ -63,7 +63,6 @@ bun dev
 - SEO Optimization (~)
 - Open Graph Image Generation
 
-
 ## 💻 Technologies
 
 This project leverages cutting-edge web technologies:
@@ -77,7 +76,6 @@ This project leverages cutting-edge web technologies:
 - [Bun V1.2.10](https://bun.sh) - Fast JavaScript runtime
 - [Vercel](https://vercel.com) - Deployment platform
 - [HugeIcons](https://hugeicons.com) - Icon library
-
 
 ## 📄 License
 

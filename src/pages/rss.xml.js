@@ -12,7 +12,7 @@ export async function GET(context) {
       title: article.data.title,
       pubDate: article.data.publishedTime,
       description: article.data.description,
-      link: `/articles/${new Date(article.data.publishedTime).getUTCFullYear().toString()}/${String(new Date(article.data.publishedTime).getUTCMonth() + 1).padStart(2, '0')}/${String(new Date(article.data.publishedTime).getUTCDate()).padStart(2, '0')}/${article.id.split('/').filter(Boolean).slice(-1)[0] === 'index' ? article.id.split('/').filter(Boolean).slice(-2, -1)[0] : article.id.split('/').filter(Boolean).slice(-1)[0]}/`,
+      link: `/articles/${new Date(article.data.publishedTime).getUTCFullYear().toString()}/${String(new Date(article.data.publishedTime).getUTCMonth() + 1).padStart(2, "0")}/${String(new Date(article.data.publishedTime).getUTCDate()).padStart(2, "0")}/${article.id.split("/").filter(Boolean).slice(-1)[0] === "index" ? article.id.split("/").filter(Boolean).slice(-2, -1)[0] : article.id.split("/").filter(Boolean).slice(-1)[0]}/`,
     })),
   });
 }

@@ -5,19 +5,19 @@ const FORMAT_SHORT = "MMMM dd, yyyy zz";
 
 const dateCache = new Map<string, Date>();
 
-
 export const getDateDistance = (date: string | null | undefined) => {
-  if (!date) return '';
+  if (!date) return "";
   return formatDistanceToNow(parseISO(date), {
     addSuffix: true,
   });
 };
 
-
-export const normalizeDate = (date: string | Date | null | undefined): string => {
-  if (!date) return '';
+export const normalizeDate = (
+  date: string | Date | null | undefined,
+): string => {
+  if (!date) return "";
   return date instanceof Date ? date.toISOString() : date;
-}
+};
 
 const getParsedDate = (dateString: string): Date => {
   if (dateCache.has(dateString)) {
@@ -36,10 +36,10 @@ const getParsedDate = (dateString: string): Date => {
 
 export const formatDate = (
   date: string | Date | null | undefined,
-  formatType: "long" | "short" = "long"
+  formatType: "long" | "short" = "long",
 ) => {
-  if (!date) return '';
-  
+  if (!date) return "";
+
   // Ensure that the date is a valid Date string
   const dateString = date instanceof Date ? date.toISOString() : date;
 
@@ -47,5 +47,8 @@ export const formatDate = (
   const parsedDate = getParsedDate(dateString);
 
   // Format the date based on the requested format
-  return format(parsedDate, formatType === "short" ? FORMAT_SHORT : FORMAT_LONG);
+  return format(
+    parsedDate,
+    formatType === "short" ? FORMAT_SHORT : FORMAT_LONG,
+  );
 };

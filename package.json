@@ -6,7 +6,8 @@
     "dev": "astro dev",
     "build": "cross-env RUN_KEYSTATIC=false astro build",
     "preview": "cross-env RUN_KEYSTATIC=false astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "format": "prettier --write ."
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
@@ -37,6 +38,7 @@
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.16",
     "cross-env": "^10.0.0",
-    "daisyui": "^5.0.54"
+    "daisyui": "^5.1.6",
+    "prettier": "3.6.2"
   }
 }

@@ -26,11 +26,9 @@ In 2025, web performance isn't just a technical requirement—it's a strategic a
 
 Google's Core Web Vitals are a set of metrics that measure real-world user experience for loading performance, interactivity, and visual stability of a page. These metrics include:
 
-* **Largest Contentful Paint (LCP):** Measures loading performance. A good LCP score is 2.5 seconds or faster.
-* **Interaction to Next Paint (INP):** Measures responsiveness. A good INP score is 200 milliseconds or less.
-* **Cumulative Layout Shift (CLS):** Measures visual stability. A good CLS score is less than 0.1.
-
-
+- **Largest Contentful Paint (LCP):** Measures loading performance. A good LCP score is 2.5 seconds or faster.
+- **Interaction to Next Paint (INP):** Measures responsiveness. A good INP score is 200 milliseconds or less.
+- **Cumulative Layout Shift (CLS):** Measures visual stability. A good CLS score is less than 0.1.
 
 ---
 
@@ -38,10 +36,10 @@ Google's Core Web Vitals are a set of metrics that measure real-world user exper
 
 LCP measures how quickly the largest visible content element loads. To improve LCP:
 
-* **Optimize Images:** Use modern formats like WebP and AVIF, and ensure images are appropriately sized.
-* **Implement Lazy Loading:** Defer offscreen images and videos to reduce initial load time.
-* **Minimize Critical CSS:** Inline critical CSS and defer non-essential styles to speed up rendering.
-* **Optimize Web Fonts:** Use font-display: swap to avoid invisible text during font loading.
+- **Optimize Images:** Use modern formats like WebP and AVIF, and ensure images are appropriately sized.
+- **Implement Lazy Loading:** Defer offscreen images and videos to reduce initial load time.
+- **Minimize Critical CSS:** Inline critical CSS and defer non-essential styles to speed up rendering.
+- **Optimize Web Fonts:** Use font-display: swap to avoid invisible text during font loading.
 
 ---
 
@@ -49,9 +47,9 @@ LCP measures how quickly the largest visible content element loads. To improve L
 
 INP measures responsiveness by tracking the time from a user's interaction to the next paint. To improve INP:
 
-* **Reduce JavaScript Execution Time:** Minimize and defer non-essential JavaScript to prevent long main-thread tasks.
-* **Optimize Event Listeners:** Use passive event listeners and avoid blocking the main thread with heavy computations.
-* **Implement Efficient Animations:** Use the `requestAnimationFrame` API for smooth animations and transitions.
+- **Reduce JavaScript Execution Time:** Minimize and defer non-essential JavaScript to prevent long main-thread tasks.
+- **Optimize Event Listeners:** Use passive event listeners and avoid blocking the main thread with heavy computations.
+- **Implement Efficient Animations:** Use the `requestAnimationFrame` API for smooth animations and transitions.
 
 ---
 
@@ -59,9 +57,9 @@ INP measures responsiveness by tracking the time from a user's interaction to th
 
 CLS measures visual stability by quantifying unexpected layout shifts. To improve CLS:
 
-* **Set Size for Media:** Always specify width and height for images and videos to prevent layout shifts.
-* **Avoid Inserting Content Above Existing Content:** Ensure that new content doesn't push existing content down unexpectedly.
-* **Use Transformations for Animations:** Prefer CSS transforms over properties that trigger layout recalculations.
+- **Set Size for Media:** Always specify width and height for images and videos to prevent layout shifts.
+- **Avoid Inserting Content Above Existing Content:** Ensure that new content doesn't push existing content down unexpectedly.
+- **Use Transformations for Animations:** Prefer CSS transforms over properties that trigger layout recalculations.
 
 ---
 
@@ -69,10 +67,10 @@ CLS measures visual stability by quantifying unexpected layout shifts. To improv
 
 Utilize the following tools to assess and monitor your website's performance:
 
-* **Google PageSpeed Insights:** Provides insights into performance metrics and suggestions for improvement.
-* **Chrome DevTools:** Offers detailed performance analysis and debugging tools.
-* **Lighthouse:** An open-source, automated tool for improving the quality of web pages.
-* **Web Vitals Chrome Extension:** Provides real-time feedback on Core Web Vitals metrics.
+- **Google PageSpeed Insights:** Provides insights into performance metrics and suggestions for improvement.
+- **Chrome DevTools:** Offers detailed performance analysis and debugging tools.
+- **Lighthouse:** An open-source, automated tool for improving the quality of web pages.
+- **Web Vitals Chrome Extension:** Provides real-time feedback on Core Web Vitals metrics.
 
 ---
 
@@ -80,10 +78,10 @@ Utilize the following tools to assess and monitor your website's performance:
 
 Efficient JavaScript is crucial for optimal performance:
 
-* **Tree Shaking:** Remove unused code during the build process to reduce bundle size.
-* **Code Splitting:** Break down large JavaScript files into smaller, manageable chunks.
-* **Asynchronous Loading:** Load JavaScript files asynchronously to prevent blocking the main thread.
-* **Use Modern JavaScript Syntax:** Leverage ES6+ features for cleaner and more efficient code.
+- **Tree Shaking:** Remove unused code during the build process to reduce bundle size.
+- **Code Splitting:** Break down large JavaScript files into smaller, manageable chunks.
+- **Asynchronous Loading:** Load JavaScript files asynchronously to prevent blocking the main thread.
+- **Use Modern JavaScript Syntax:** Leverage ES6+ features for cleaner and more efficient code.
 
 ---
 
@@ -91,9 +89,9 @@ Efficient JavaScript is crucial for optimal performance:
 
 Adopt modern web technologies to enhance performance:
 
-* **HTTP/3:** Offers improved performance over HTTP/2 by reducing latency and improving multiplexing.
-* **Service Workers:** Enable offline capabilities and background data synchronization.
-* **Content Delivery Networks (CDNs):** Distribute content globally to reduce latency and improve load times.
+- **HTTP/3:** Offers improved performance over HTTP/2 by reducing latency and improving multiplexing.
+- **Service Workers:** Enable offline capabilities and background data synchronization.
+- **Content Delivery Networks (CDNs):** Distribute content globally to reduce latency and improve load times.
 
 ---
 
@@ -101,13 +99,12 @@ Adopt modern web technologies to enhance performance:
 
 Performance optimization is an ongoing process:
 
-* **Set Performance Budgets:** Define acceptable performance thresholds and monitor adherence.
-* **Conduct Regular Audits:** Use tools like Lighthouse and Web Vitals to perform regular performance audits.
-* **Analyze Real User Data:** Utilize Real User Monitoring (RUM) tools to gather insights from actual users.
+- **Set Performance Budgets:** Define acceptable performance thresholds and monitor adherence.
+- **Conduct Regular Audits:** Use tools like Lighthouse and Web Vitals to perform regular performance audits.
+- **Analyze Real User Data:** Utilize Real User Monitoring (RUM) tools to gather insights from actual users.
 
 ---
 
 ### 🔄 Conclusion
 
 In 2025, delivering a fast, resilient web experience is non-negotiable. By focusing on Core Web Vitals, optimizing JavaScript, and leveraging modern web technologies, you can build websites that not only perform well but also provide exceptional user experiences. Remember, performance is a continuous journey—regular monitoring and optimization are key to staying ahead.
-

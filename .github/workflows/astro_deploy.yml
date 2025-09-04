@@ -2,8 +2,8 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [ main ]  # Trigger on push to the 'main' branch
-  workflow_dispatch:  # Allows manual run from Actions tab
+    branches: [main] # Trigger on push to the 'main' branch
+  workflow_dispatch: # Allows manual run from Actions tab
 
 permissions:
   contents: read
@@ -13,7 +13,7 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-    environment: github-pages  
+    environment: github-pages
     steps:
       # 1. Checkout code
       - name: Checkout repository
@@ -23,11 +23,15 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20'
+          node-version: "20"
 
-      # 3. Create .env file with Giscus secrets
+      # 3. Create .env file with secrets
       - name: Create .env file
         run: |
+          echo "PUBLIC_GOOGLE_ADSENSE_CLIENT_ID=${{ secrets.PUBLIC_GOOGLE_ADSENSE_CLIENT_ID }}" >> .env
+          echo "PUBLIC_GOOGLE_SITE_VERIFICATION=${{ secrets.PUBLIC_GOOGLE_SITE_VERIFICATION }}" >> .env
+          echo "PUBLIC_GTM_ID=${{ secrets.PUBLIC_GTM_ID }}" >> .env
+          echo "PUBLIC_GA_MEASUREMENT_ID=${{ secrets.PUBLIC_GA_MEASUREMENT_ID }}" >> .env
           echo "PUBLIC_GISCUS_REPO=${{ secrets.PUBLIC_GISCUS_REPO }}" >> .env
           echo "PUBLIC_GISCUS_REPO_ID=${{ secrets.PUBLIC_GISCUS_REPO_ID }}" >> .env
           echo "PUBLIC_GISCUS_CATEGORY=${{ secrets.PUBLIC_GISCUS_CATEGORY }}" >> .env

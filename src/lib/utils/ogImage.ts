@@ -7,7 +7,7 @@ import type { CollectionEntry } from "astro:content";
 export function generateOGImage(
   title: string,
   description: string,
-  type: 'article' | 'website' = 'website'
+  type: "article" | "website" = "website",
 ): string {
   // Generate SVG content
   const svgContent = generateSVGOGImageContent(title, description, type);
@@ -23,7 +23,7 @@ export function generateOGImage(
 export function generateSVGOGImageContent(
   title: string,
   description: string,
-  type: 'article' | 'website' = 'website'
+  type: "article" | "website" = "website",
 ): string {
   return `
     <svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
@@ -74,7 +74,9 @@ export function generateSVGOGImageContent(
 /**
  * Check if an article has a custom OG image
  */
-export function hasCustomOGImage(collection: CollectionEntry<"articles">): boolean {
+export function hasCustomOGImage(
+  collection: CollectionEntry<"articles">,
+): boolean {
   return !!(collection.data.cover || collection.data.coverUrl);
 }
 
@@ -85,7 +87,7 @@ export function hasCustomOGImage(collection: CollectionEntry<"articles">): boole
 export function getOGImageForCollection(
   collection: CollectionEntry<"articles" | "views">,
   title: string,
-  description: string
+  description: string,
 ): string {
   if (collection.collection === "articles") {
     const articleData = (collection as CollectionEntry<"articles">).data;
@@ -96,7 +98,11 @@ export function getOGImageForCollection(
   }
 
   // Generate OG image using data URL
-  return generateOGImage(title, description, collection.collection === "articles" ? "article" : "website");
+  return generateOGImage(
+    title,
+    description,
+    collection.collection === "articles" ? "article" : "website",
+  );
 }
 
 /**
@@ -105,12 +111,18 @@ export function getOGImageForCollection(
 function escapeXml(unsafe: string): string {
   return unsafe.replace(/[<>&'"]/g, (c) => {
     switch (c) {
-      case '<': return '&lt;';
-      case '>': return '&gt;';
-      case '&': return '&amp;';
-      case "'": return '&#39;';
-      case '"': return '&quot;';
-      default: return c;
+      case "<":
+        return "&lt;";
+      case ">":
+        return "&gt;";
+      case "&":
+        return "&amp;";
+      case "'":
+        return "&#39;";
+      case '"':
+        return "&quot;";
+      default:
+        return c;
     }
   });
 }

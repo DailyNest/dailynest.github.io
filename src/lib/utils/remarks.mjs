@@ -32,17 +32,20 @@ export function modifiedTime() {
         // Get the last commit date for this specific file
         const gitResult = execSync(
           `git log -1 --format="%cI" -- "${filepath}"`,
-          { stdio: ["ignore", "pipe", "ignore"], encoding: 'utf8' }
+          { stdio: ["ignore", "pipe", "ignore"], encoding: "utf8" },
         )
           .toString()
           .trim();
 
-        if (gitResult && gitResult !== '') {
+        if (gitResult && gitResult !== "") {
           lastModified = gitResult;
           hasGitHistory = true;
         }
       } catch (error) {
-        console.warn(`Failed to get Git commit date for ${filepath}:`, error.message);
+        console.warn(
+          `Failed to get Git commit date for ${filepath}:`,
+          error.message,
+        );
       }
     }
 
@@ -54,7 +57,7 @@ export function modifiedTime() {
     if (!file.data.astro.frontmatter) {
       file.data.astro.frontmatter = {};
     }
-    
+
     // Only set lastModified if we have real Git history
     if (hasGitHistory && lastModified) {
       file.data.astro.frontmatter.lastModified = lastModified;
