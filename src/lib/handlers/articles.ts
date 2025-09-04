@@ -7,7 +7,7 @@ const articlesCollection = (
 ).sort((a, b) =>
   new Date(b.data.publishedTime)
     .toISOString()
-    .localeCompare(new Date(a.data.publishedTime).toISOString())
+    .localeCompare(new Date(a.data.publishedTime).toISOString()),
 );
 
 export const articlesHandler = {
@@ -16,12 +16,12 @@ export const articlesHandler = {
   mainHeadline: () => {
     // Prefer an explicit main headline; otherwise fall back to the first article
     const explicit = articlesCollection.find(
-      (article) => article.data.isMainHeadline === true
+      (article) => article.data.isMainHeadline === true,
     );
     const article = explicit ?? articlesCollection[0];
     if (!article)
       throw new Error(
-        "Please ensure there is at least one item to display for the main headline."
+        "Please ensure there is at least one item to display for the main headline.",
       );
     return article;
   },
@@ -32,7 +32,7 @@ export const articlesHandler = {
     let subHeadlines = articlesCollection
       .filter(
         (article) =>
-          article.data.isSubHeadline === true && mainHeadline.id !== article.id
+          article.data.isSubHeadline === true && mainHeadline.id !== article.id,
       )
       .slice(0, 4);
 

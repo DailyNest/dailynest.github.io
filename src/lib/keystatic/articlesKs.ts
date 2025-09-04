@@ -67,7 +67,7 @@ export const articlesKs = collection({
             min: 1,
           },
         },
-      }
+      },
     ),
     keywords: fields.array(fields.text({ label: "Keyword" }), {
       label: "Keywords (optional)",

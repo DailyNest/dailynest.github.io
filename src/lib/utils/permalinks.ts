@@ -4,9 +4,11 @@ function pad2(n: number) {
   return n.toString().padStart(2, "0");
 }
 
-export function articleDateSegments(
-  publishedTime: string | Date
-): { year: string; month: string; day: string } {
+export function articleDateSegments(publishedTime: string | Date): {
+  year: string;
+  month: string;
+  day: string;
+} {
   const d = new Date(publishedTime);
   const year = d.getUTCFullYear().toString();
   const month = pad2(d.getUTCMonth() + 1);
@@ -33,16 +35,14 @@ export function slugFromId(id: string, fallbackTitle?: string): string {
   return id;
 }
 
-export function articlePermalink(
-  article: CollectionEntry<"articles">
-): string {
+export function articlePermalink(article: CollectionEntry<"articles">): string {
   const { year, month, day } = articleDateSegments(article.data.publishedTime);
   const slug = slugFromId(article.id, article.data.title);
   return `/articles/${year}/${month}/${day}/${slug}/`;
 }
 
 export function articleContentFilePath(
-  article: CollectionEntry<"articles">
+  article: CollectionEntry<"articles">,
 ): string {
   const { year, month, day } = articleDateSegments(article.data.publishedTime);
   const slug = slugFromId(article.id, article.data.title);

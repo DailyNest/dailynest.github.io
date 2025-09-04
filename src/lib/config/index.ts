@@ -2,9 +2,20 @@ import type { Link } from "../types";
 
 export const SITE = {
   title: "DailyNest",
-  description: "Welcome to the DailyNest, your go-to source for the latest trends in technology and more.",
+  description:
+    "Welcome to the DailyNest, your go-to source for the latest trends in technology and more.",
   // Site-level keywords used as a fallback for pages without keywords
-  keywords: ["dailynest", "technology", "programming", "lifestyle", "productivity", "health", "finance", "blog", "tutorial"],
+  keywords: [
+    "dailynest",
+    "technology",
+    "programming",
+    "lifestyle",
+    "productivity",
+    "health",
+    "finance",
+    "blog",
+    "tutorial",
+  ],
   author: "DailyNest",
   url: "https://dailynest.github.io",
   github: "https://github.com/DailyNest/dailynest.github.io",
@@ -47,7 +58,7 @@ export const NAVIGATION_LINKS: Link[] = [
   {
     href: "/categories/tutorial",
     text: "Tutorial",
-  }
+  },
 ];
 
 export const OTHER_LINKS: Link[] = [

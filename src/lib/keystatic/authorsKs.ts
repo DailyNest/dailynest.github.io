@@ -29,7 +29,7 @@ export const authorsKs = collection({
       {
         label: "Social Links",
         itemLabel: (props) => props.fields?.name.value ?? "",
-      }
+      },
     ),
     content: fields.mdx({
       label: "Content",
