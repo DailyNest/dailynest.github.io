@@ -13,11 +13,6 @@ self.addEventListener("activate", (event) => {
   event.waitUntil(self.clients.claim());
 });
 
-// Basic fetch handler (no-op passthrough)
-self.addEventListener("fetch", (event) => {
-  // Let the browser handle requests by default
-});
-
 // Push handler: show notification if payload provided
 self.addEventListener("push", (event) => {
   let data = {};
