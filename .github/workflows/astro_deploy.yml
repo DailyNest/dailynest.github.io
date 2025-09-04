@@ -12,6 +12,8 @@ permissions:
 
 jobs:
   build:
+    # Only run on the original organization repository, not on forks
+    if: github.repository == 'dailynest/dailynest.github.io'
     runs-on: ubuntu-latest
     environment: github-pages
     steps:
@@ -25,13 +27,9 @@ jobs:
         with:
           node-version: "20"
 
-      # 3. Create .env file with secrets
+      # 3. Create .env file with Giscus secrets
       - name: Create .env file
         run: |
-          echo "PUBLIC_GOOGLE_ADSENSE_CLIENT_ID=${{ secrets.PUBLIC_GOOGLE_ADSENSE_CLIENT_ID }}" >> .env
-          echo "PUBLIC_GOOGLE_SITE_VERIFICATION=${{ secrets.PUBLIC_GOOGLE_SITE_VERIFICATION }}" >> .env
-          echo "PUBLIC_GTM_ID=${{ secrets.PUBLIC_GTM_ID }}" >> .env
-          echo "PUBLIC_GA_MEASUREMENT_ID=${{ secrets.PUBLIC_GA_MEASUREMENT_ID }}" >> .env
           echo "PUBLIC_GISCUS_REPO=${{ secrets.PUBLIC_GISCUS_REPO }}" >> .env
           echo "PUBLIC_GISCUS_REPO_ID=${{ secrets.PUBLIC_GISCUS_REPO_ID }}" >> .env
           echo "PUBLIC_GISCUS_CATEGORY=${{ secrets.PUBLIC_GISCUS_CATEGORY }}" >> .env
@@ -58,6 +56,8 @@ jobs:
 
   deploy:
     needs: build
+    # Only run on the original organization repository, not on forks
+    if: github.repository == 'dailynest/dailynest.github.io'
     runs-on: ubuntu-latest
     environment:
       name: github-pages
