@@ -5,16 +5,16 @@
 
 export const GOOGLE_CONFIG = {
   // Google Analytics Measurement ID
-  GA_MEASUREMENT_ID: import.meta.env.PUBLIC_GA_MEASUREMENT_ID || '',
+  GA_MEASUREMENT_ID: import.meta.env.PUBLIC_GA_MEASUREMENT_ID || "",
 
   // Google Tag Manager Container ID
-  GTM_ID: import.meta.env.PUBLIC_GTM_ID || '',
+  GTM_ID: import.meta.env.PUBLIC_GTM_ID || "",
 
   // Google AdSense Client ID
-  ADSENSE_CLIENT_ID: import.meta.env.PUBLIC_GOOGLE_ADSENSE_CLIENT_ID || '',
+  ADSENSE_CLIENT_ID: import.meta.env.PUBLIC_GOOGLE_ADSENSE_CLIENT_ID || "",
 
   // Google Site Verification
-  SITE_VERIFICATION: import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION || '',
+  SITE_VERIFICATION: import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION || "",
 } as const;
 
 /**
