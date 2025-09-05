@@ -45,24 +45,28 @@ const OGImage = new URL(meta.ogImage, Astro.url).href;
        crossorigin="anonymous"></script>
   )}
 
-  <!-- Google Consent Mode v2 -->
-  {hasGoogleAdSense() && (
-    <script is:inline>
-      // Initialize Google Consent Mode v2
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
+  <!-- Google Analytics and Consent Mode -->
+  {hasGoogleAnalytics() && (
+    <>
+      <script async src={`https://www.googletagmanager.com/gtag/js?id=${GOOGLE_CONFIG.GA_MEASUREMENT_ID}`}></script>
+      <script is:inline define:vars={{ gaId: GOOGLE_CONFIG.GA_MEASUREMENT_ID }}>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
 
-      // Set default consent state (denied until user consents)
-      gtag('consent', 'default', {
-        'ad_storage': 'denied',
-        'ad_user_data': 'denied',
-        'ad_personalization': 'denied',
-        'analytics_storage': 'denied',
-        'functionality_storage': 'granted',
-        'security_storage': 'granted'
-      });
-    </script>
+        // Set default consent state (granted by default)
+        gtag('consent', 'default', {
+          'ad_storage': 'granted',
+          'ad_user_data': 'granted',
+          'ad_personalization': 'granted',
+          'analytics_storage': 'granted',
+          'functionality_storage': 'granted',
+          'security_storage': 'granted'
+        });
+
+        gtag('config', gaId);
+      </script>
+    </>
   )}
 
   <!-- Google Tag Manager -->
@@ -76,19 +80,7 @@ const OGImage = new URL(meta.ogImage, Astro.url).href;
     </script>
   )}
 
-  <!-- Google Analytics (gtag.js) -->
-  {hasGoogleAnalytics() && (
-    <>
-      <script async src={`https://www.googletagmanager.com/gtag/js?id=${GOOGLE_CONFIG.GA_MEASUREMENT_ID}`}></script>
-      <script is:inline define:vars={{ gaId: GOOGLE_CONFIG.GA_MEASUREMENT_ID }}>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
 
-        gtag('config', gaId);
-      </script>
-    </>
-  )}
 
   <!-- RSS & Sitemap -->
   <link rel="sitemap" href="/sitemap-index.xml" />
@@ -103,8 +95,8 @@ const OGImage = new URL(meta.ogImage, Astro.url).href;
   <link rel="canonical" href={meta.canonical || canonicalURL} />
 
   <!-- Page Metadata -->
-  <title>{isArticleMeta(meta) || Astro.url.pathname.includes('/authors/') ? meta.title : Astro.url.pathname.includes('/categories/') ? `${Astro.url.pathname.split('/')[2].charAt(0).toUpperCase() + Astro.url.pathname.split('/')[2].slice(1)} Articles | ${SITE.title}` : `${meta.title} - Technology, Programming & Lifestyle`}</title>
-  <meta name="title" content={isArticleMeta(meta) || Astro.url.pathname.includes('/authors/') ? meta.metaTitle : Astro.url.pathname.includes('/categories/') ? `${Astro.url.pathname.split('/')[2].charAt(0).toUpperCase() + Astro.url.pathname.split('/')[2].slice(1)} Articles` : `${meta.metaTitle} - Technology, Programming & Lifestyle`} />
+  <title>{isArticleMeta(meta) || Astro.url.pathname.includes('/authors/') ? meta.title : Astro.url.pathname.includes('/categories/') ? `${Astro.url.pathname.split('/')[2].charAt(0).toUpperCase() + Astro.url.pathname.split('/')[2].slice(1)} Articles | ${SITE.title}` : meta.title}</title>
+  <meta name="title" content={isArticleMeta(meta) || Astro.url.pathname.includes('/authors/') ? meta.metaTitle : Astro.url.pathname.includes('/categories/') ? `${Astro.url.pathname.split('/')[2].charAt(0).toUpperCase() + Astro.url.pathname.split('/')[2].slice(1)} Articles` : meta.metaTitle} />
   <meta name="description" content={meta.description} />
   {meta.robots ? <meta name="robots" content={meta.robots} /> : null}
   {
@@ -127,7 +119,7 @@ const OGImage = new URL(meta.ogImage, Astro.url).href;
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content={meta.type} />
   <meta property="og:url" content={canonicalURL} />
-  <meta property="og:title" content={isArticleMeta(meta) || Astro.url.pathname.includes('/authors/') ? meta.title : Astro.url.pathname.includes('/categories/') ? `${Astro.url.pathname.split('/')[2].charAt(0).toUpperCase() + Astro.url.pathname.split('/')[2].slice(1)} Articles | ${SITE.title}` : `${meta.title} - Technology, Programming & Lifestyle`} />
+  <meta property="og:title" content={isArticleMeta(meta) || Astro.url.pathname.includes('/authors/') ? meta.title : Astro.url.pathname.includes('/categories/') ? `${Astro.url.pathname.split('/')[2].charAt(0).toUpperCase() + Astro.url.pathname.split('/')[2].slice(1)} Articles | ${SITE.title}` : meta.title} />
   <meta property="og:description" content={meta.description} />
   <meta property="og:image" content={OGImage} />
   <meta property="og:image:alt" content={meta.ogImageAlt} />
@@ -136,7 +128,7 @@ const OGImage = new URL(meta.ogImage, Astro.url).href;
   <meta property="twitter:site" content={Astro.site} />
   <meta property="twitter:card" content="summary_large_image" />
   <meta property="twitter:url" content={canonicalURL} />
-  <meta property="twitter:title" content={isArticleMeta(meta) || Astro.url.pathname.includes('/authors/') ? meta.title : Astro.url.pathname.includes('/categories/') ? `${Astro.url.pathname.split('/')[2].charAt(0).toUpperCase() + Astro.url.pathname.split('/')[2].slice(1)} Articles | ${SITE.title}` : `${meta.title} - Technology, Programming & Lifestyle`} />
+  <meta property="twitter:title" content={isArticleMeta(meta) || Astro.url.pathname.includes('/authors/') ? meta.title : Astro.url.pathname.includes('/categories/') ? `${Astro.url.pathname.split('/')[2].charAt(0).toUpperCase() + Astro.url.pathname.split('/')[2].slice(1)} Articles | ${SITE.title}` : meta.title} />
   <meta property="twitter:description" content={meta.description} />
   <meta property="twitter:image" content={OGImage} />
   <meta property="twitter:image:alt" content={meta.ogImageAlt} />

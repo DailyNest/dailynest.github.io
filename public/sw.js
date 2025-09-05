@@ -1,5 +1,5 @@
 /* Minimal service worker for DailyNest
-   - Provides a safe no-op fetch handler and basic install/activate flows
+   - Provides basic install/activate flows for immediate activation
    - Listens for push and notificationclick events
    - Expand this with caching or push handling as needed
 */

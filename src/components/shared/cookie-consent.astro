@@ -159,17 +159,21 @@
       const consent = this.getCookieConsent();
 
       if (!consent) {
-        // Show banner if no consent given yet
-        this.showBanner();
+        // Apply default consent (all granted)
+        const defaultConsent = {
+          analytics: true,
+          advertising: true,
+          functional: true,
+          timestamp: Date.now(),
+        };
+        this.applyConsent(defaultConsent);
+      } else {
+        // Apply existing preferences
+        this.applyConsent(consent);
       }
 
       // Always setup event listeners (for customize functionality)
       this.setupEventListeners();
-
-      if (consent) {
-        // Apply existing preferences
-        this.applyConsent(consent);
-      }
     }
 
     showBanner() {
@@ -209,9 +213,9 @@
       if (rejectBtn) {
         rejectBtn.addEventListener("click", () => {
           const consent = {
-            analytics: false,
-            advertising: true, // Always true for AdSense (mandatory)
-            functional: true, // Always true for functionality (mandatory)
+            analytics: false, // Only reject analytics
+            advertising: true, // Keep ads enabled
+            functional: true, // Keep functional enabled
             timestamp: Date.now(),
           };
           this.saveConsent(consent);
