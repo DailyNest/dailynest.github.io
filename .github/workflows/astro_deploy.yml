@@ -27,7 +27,7 @@ jobs:
         with:
           node-version: "20"
 
-      # 3. Create .env file with Giscus secrets
+      # 3. Create .env file with secrets
       - name: Create .env file
         run: |
           echo "PUBLIC_GISCUS_REPO=${{ secrets.PUBLIC_GISCUS_REPO }}" >> .env
@@ -41,6 +41,10 @@ jobs:
           echo "PUBLIC_GISCUS_INPUT_POSITION=${{ secrets.PUBLIC_GISCUS_INPUT_POSITION }}" >> .env
           echo "PUBLIC_GISCUS_THEME=${{ secrets.PUBLIC_GISCUS_THEME }}" >> .env
           echo "PUBLIC_GISCUS_LANG=${{ secrets.PUBLIC_GISCUS_LANG }}" >> .env
+          echo "PUBLIC_GOOGLE_ADSENSE_CLIENT_ID=${{ secrets.PUBLIC_GOOGLE_ADSENSE_CLIENT_ID }}" >> .env
+          echo "PUBLIC_GOOGLE_SITE_VERIFICATION=${{ secrets.PUBLIC_GOOGLE_SITE_VERIFICATION }}" >> .env
+          echo "PUBLIC_GTM_ID=${{ secrets.PUBLIC_GTM_ID }}" >> .env
+          echo "PUBLIC_GA_MEASUREMENT_ID=${{ secrets.PUBLIC_GA_MEASUREMENT_ID }}" >> .env
 
       # 4. Install dependencies and build site
       - name: Install dependencies and build site
