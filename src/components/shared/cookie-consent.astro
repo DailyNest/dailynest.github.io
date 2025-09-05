@@ -64,7 +64,7 @@
       <h4 class="font-medium text-base-content mb-3">
         Choose your preferences:
       </h4>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div class="flex items-start gap-3">
           <input
             type="checkbox"
@@ -106,17 +106,32 @@
             type="checkbox"
             id="functional-cookies"
             class="checkbox checkbox-sm"
-            checked
-            disabled
           />
           <div>
             <label
               for="functional-cookies"
-              class="font-medium text-sm cursor-pointer opacity-60"
-              >Functional Cookies (Required)</label
+              class="font-medium text-sm cursor-pointer"
+              >Functional Cookies</label
             >
             <p class="text-xs text-base-content/60 mt-1">
               Essential for website functionality and your preferences
+            </p>
+          </div>
+        </div>
+        <div class="flex items-start gap-3">
+          <input
+            type="checkbox"
+            id="personalization-cookies"
+            class="checkbox checkbox-sm"
+          />
+          <div>
+            <label
+              for="personalization-cookies"
+              class="font-medium text-sm cursor-pointer"
+              >Personalization Cookies</label
+            >
+            <p class="text-xs text-base-content/60 mt-1">
+              Remember your preferences and customize your experience
             </p>
           </div>
         </div>
@@ -159,20 +174,14 @@
       const consent = this.getCookieConsent();
 
       if (!consent) {
-        // Apply default consent (all granted)
-        const defaultConsent = {
-          analytics: true,
-          advertising: true,
-          functional: true,
-          timestamp: Date.now(),
-        };
-        this.applyConsent(defaultConsent);
+        // Show banner for first-time users - no default consent applied
+        this.showBanner();
       } else {
         // Apply existing preferences
         this.applyConsent(consent);
       }
 
-      // Always setup event listeners (for customize functionality)
+      // Always setup event listeners
       this.setupEventListeners();
     }
 
@@ -198,8 +207,9 @@
         acceptBtn.addEventListener("click", () => {
           const consent = {
             analytics: true,
-            advertising: true, // Always true for AdSense
-            functional: true, // Always true for functionality
+            advertising: true, // Always true for AdSense (mandatory)
+            functional: true,
+            personalization: true,
             timestamp: Date.now(),
           };
           this.saveConsent(consent);
@@ -208,14 +218,15 @@
         });
       }
 
-      // Reject all cookies (but advertising and functional remain enabled)
+      // Reject non-essential cookies (advertising remains enabled)
       const rejectBtn = document.getElementById("reject-cookies");
       if (rejectBtn) {
         rejectBtn.addEventListener("click", () => {
           const consent = {
-            analytics: false, // Only reject analytics
-            advertising: true, // Keep ads enabled
-            functional: true, // Keep functional enabled
+            analytics: false,
+            advertising: true, // Always true for AdSense (mandatory)
+            functional: false,
+            personalization: false,
             timestamp: Date.now(),
           };
           this.saveConsent(consent);
@@ -270,11 +281,21 @@
           const analyticsCheckbox = document.getElementById(
             "analytics-cookies"
           ) as HTMLInputElement;
+          const advertisingCheckbox = document.getElementById(
+            "advertising-cookies"
+          ) as HTMLInputElement;
+          const functionalCheckbox = document.getElementById(
+            "functional-cookies"
+          ) as HTMLInputElement;
+          const personalizationCheckbox = document.getElementById(
+            "personalization-cookies"
+          ) as HTMLInputElement;
 
           const consent = {
             analytics: analyticsCheckbox?.checked ?? false,
             advertising: true, // Always true for AdSense (mandatory)
-            functional: true, // Always true for functionality (mandatory)
+            functional: functionalCheckbox?.checked ?? false,
+            personalization: personalizationCheckbox?.checked ?? false,
             timestamp: Date.now(),
           };
           this.saveConsent(consent);
@@ -294,18 +315,29 @@
     }
 
     applyConsent(consent: any) {
-      // Handle Google AdSense consent (always enabled for mandatory advertising)
+      // Handle advertising consent (always enabled for AdSense)
       this.enableAdSense();
 
-      // Handle analytics
+      // Handle analytics consent
       if (consent.analytics) {
         this.enableAnalytics();
       } else {
         this.disableAnalytics();
       }
 
-      // Functional cookies are always enabled for basic functionality
-      this.enableFunctional();
+      // Handle functional consent
+      if (consent.functional) {
+        this.enableFunctional();
+      } else {
+        this.disableFunctional();
+      }
+
+      // Handle personalization consent
+      if (consent.personalization) {
+        this.enablePersonalization();
+      } else {
+        this.disablePersonalization();
+      }
     }
 
     enableAdSense() {
@@ -349,11 +381,39 @@
     }
 
     enableFunctional() {
-      // Functional cookies are always enabled
+      // Enable functional cookies
       if (typeof gtag !== "undefined") {
         gtag("consent", "update", {
           functionality_storage: "granted",
           security_storage: "granted",
+        });
+      }
+    }
+
+    disableFunctional() {
+      // Disable functional cookies
+      if (typeof gtag !== "undefined") {
+        gtag("consent", "update", {
+          functionality_storage: "denied",
+          security_storage: "denied",
+        });
+      }
+    }
+
+    enablePersonalization() {
+      // Enable personalization cookies
+      if (typeof gtag !== "undefined") {
+        gtag("consent", "update", {
+          personalization_storage: "granted",
+        });
+      }
+    }
+
+    disablePersonalization() {
+      // Disable personalization cookies
+      if (typeof gtag !== "undefined") {
+        gtag("consent", "update", {
+          personalization_storage: "denied",
         });
       }
     }
