@@ -1,4 +1,19 @@
-# DailyNest 📰
+<h1 align="center">DailyNest 📰</h1>
+
+<div align="center">
+
+[![License](https://img.shields.io/github/license/DailyNest/dailynest.github.io)](https://github.com/DailyNest/dailynest.github.io/blob/main/LICENSE)
+[![Open Source](https://img.shields.io/badge/Open%20Source-Yes-green)](https://github.com/DailyNest/dailynest.github.io)
+[![GitHub issues](https://img.shields.io/github/issues/DailyNest/dailynest.github.io)](https://github.com/DailyNest/dailynest.github.io/issues)
+[![GitHub pull requests](https://img.shields.io/github/issues-pr/DailyNest/dailynest.github.io)](https://github.com/DailyNest/dailynest.github.io/pulls)
+[![GitHub stars](https://img.shields.io/github/stars/DailyNest/dailynest.github.io)](https://github.com/DailyNest/dailynest.github.io/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/DailyNest/dailynest.github.io)](https://github.com/DailyNest/dailynest.github.io/network)
+[![GitHub contributors](https://img.shields.io/github/contributors/DailyNest/dailynest.github.io)](https://github.com/DailyNest/dailynest.github.io/graphs/contributors)
+[![Website](https://img.shields.io/badge/Website-dailynest.github.io-blue)](https://dailynest.github.io/)
+[![HitCount](https://hits.dwyl.com/dailynest/dailynestgithubio.svg?style=flat-square)](http://hits.dwyl.com/dailynest/dailynestgithubio)
+
+
+</div>
 
 A tech tutorials and news site built with Astro, focused on clear, readable content and a fast, accessible experience.
 
@@ -77,10 +92,16 @@ This project leverages cutting-edge web technologies:
 - [Vercel](https://vercel.com) - Deployment platform
 - [HugeIcons](https://hugeicons.com) - Icon library
 
-## 📄 License
+## Contributors
 
-This project is licensed under the Apache License 2.0. See `LICENSE.md` for details.
+<a href="https://github.com/DailyNest/dailynest.github.io/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=DailyNest/dailynest.github.io" />
+</a>
 
 ## 🤝 Contributing
 
 Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/DailyNest/dailynest.github.io/issues).
+
+## 📄 License
+
+This project is licensed under the Apache License 2.0. See `LICENSE.md` for details.

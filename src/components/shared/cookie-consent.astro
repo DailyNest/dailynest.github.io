@@ -106,12 +106,14 @@
             type="checkbox"
             id="functional-cookies"
             class="checkbox checkbox-sm"
+            checked
+            disabled
           />
           <div>
             <label
               for="functional-cookies"
-              class="font-medium text-sm cursor-pointer"
-              >Functional Cookies</label
+              class="font-medium text-sm cursor-pointer opacity-60"
+              >Functional Cookies (Required)</label
             >
             <p class="text-xs text-base-content/60 mt-1">
               Essential for website functionality and your preferences
@@ -170,14 +172,18 @@
     }
 
     initialize() {
+      // console.log("Initializing cookie consent");
       // Check if user has already made a choice
       const consent = this.getCookieConsent();
+      // console.log("Existing consent:", consent);
 
       if (!consent) {
         // Show banner for first-time users - no default consent applied
+        // console.log("No existing consent, showing banner");
         this.showBanner();
       } else {
         // Apply existing preferences
+        // console.log("Applying existing consent");
         this.applyConsent(consent);
       }
 
@@ -194,6 +200,7 @@
     }
 
     hideBanner() {
+      // console.log("Hiding banner");
       this.consentBanner.classList.add("translate-y-full");
       setTimeout(() => {
         this.consentBanner.style.display = "none";
@@ -205,27 +212,29 @@
       const acceptBtn = document.getElementById("accept-cookies");
       if (acceptBtn) {
         acceptBtn.addEventListener("click", () => {
+          // console.log("Accept All clicked");
           const consent = {
             analytics: true,
             advertising: true, // Always true for AdSense (mandatory)
-            functional: true,
+            functional: true, // Always true for functionality (mandatory)
             personalization: true,
             timestamp: Date.now(),
           };
+          // console.log("Saving consent:", consent);
           this.saveConsent(consent);
           this.applyConsent(consent);
           this.hideBanner();
         });
       }
 
-      // Reject non-essential cookies (advertising remains enabled)
+      // Reject non-essential cookies (advertising and functional remain enabled)
       const rejectBtn = document.getElementById("reject-cookies");
       if (rejectBtn) {
         rejectBtn.addEventListener("click", () => {
           const consent = {
             analytics: false,
             advertising: true, // Always true for AdSense (mandatory)
-            functional: false,
+            functional: true, // Always true for functionality (mandatory)
             personalization: false,
             timestamp: Date.now(),
           };
@@ -243,6 +252,16 @@
           const isHidden = this.optionsPanel.classList.contains("hidden");
           const textSpan = customizeBtn.querySelector("span");
           if (isHidden) {
+            // Pre-check all customizable checkboxes when opening
+            const analyticsCheckbox = document.getElementById(
+              "analytics-cookies"
+            ) as HTMLInputElement;
+            const personalizationCheckbox = document.getElementById(
+              "personalization-cookies"
+            ) as HTMLInputElement;
+            if (analyticsCheckbox) analyticsCheckbox.checked = true;
+            if (personalizationCheckbox) personalizationCheckbox.checked = true;
+
             this.optionsPanel.classList.remove("hidden");
             if (textSpan) {
               textSpan.innerHTML =
@@ -294,10 +313,11 @@
           const consent = {
             analytics: analyticsCheckbox?.checked ?? false,
             advertising: true, // Always true for AdSense (mandatory)
-            functional: functionalCheckbox?.checked ?? false,
+            functional: true, // Always true for functionality (mandatory)
             personalization: personalizationCheckbox?.checked ?? false,
             timestamp: Date.now(),
           };
+          // console.log("Saving customized consent:", consent);
           this.saveConsent(consent);
           this.applyConsent(consent);
           this.hideBanner();
@@ -315,29 +335,59 @@
     }
 
     applyConsent(consent: any) {
-      // Handle advertising consent (always enabled for AdSense)
-      this.enableAdSense();
+      // console.log("Applying consent:", consent);
+      // console.log("Current gtag availability:", typeof gtag);
 
-      // Handle analytics consent
-      if (consent.analytics) {
-        this.enableAnalytics();
-      } else {
-        this.disableAnalytics();
-      }
+      // Wait for gtag to be available with longer timeout
+      let retryCount = 0;
+      const maxRetries = 20; // Try for up to 10 seconds
 
-      // Handle functional consent
-      if (consent.functional) {
-        this.enableFunctional();
-      } else {
-        this.disableFunctional();
-      }
+      const applyWithDelay = () => {
+        retryCount++;
+        // console.log(
+        //   `Retry attempt ${retryCount}/${maxRetries}, gtag available:`,
+        //   typeof gtag !== "undefined"
+        // );
 
-      // Handle personalization consent
-      if (consent.personalization) {
-        this.enablePersonalization();
-      } else {
-        this.disablePersonalization();
-      }
+        if (typeof gtag !== "undefined") {
+          // console.log("gtag is available, applying consent updates");
+
+          // Update all consent states at once
+          gtag("consent", "update", {
+            ad_storage: "granted", // Always granted for AdSense
+            ad_user_data: "granted", // Always granted for AdSense
+            ad_personalization: "granted", // Always granted for AdSense
+            analytics_storage: consent.analytics ? "granted" : "denied",
+            functionality_storage: "granted", // Always granted for functionality
+            security_storage: "granted", // Always granted for functionality
+            personalization_storage: consent.personalization
+              ? "granted"
+              : "denied",
+          });
+
+          // Force a pageview event to ensure tracking starts
+          if (consent.analytics) {
+            // console.log("Sending pageview event to ensure tracking");
+            gtag("event", "page_view", {
+              page_title: document.title,
+              page_location: window.location.href,
+            });
+          }
+
+          // Update Google Consent Mode defaults for future page loads
+          this.updateConsentDefaults(consent);
+
+          // console.log("Consent applied successfully");
+        } else if (retryCount < maxRetries) {
+          // console.log("gtag not available, retrying...");
+          // Retry after a longer delay
+          setTimeout(applyWithDelay, 500);
+        } else {
+          // console.error("gtag failed to load after maximum retries");
+        }
+      };
+
+      applyWithDelay();
     }
 
     enableAdSense() {
@@ -365,18 +415,24 @@
     enableAnalytics() {
       // Enable analytics tracking
       if (typeof gtag !== "undefined") {
+        // console.log("Enabling analytics");
         gtag("consent", "update", {
           analytics_storage: "granted",
         });
+      } else {
+        console.warn("gtag not available for analytics enable");
       }
     }
 
     disableAnalytics() {
       // Disable analytics tracking
       if (typeof gtag !== "undefined") {
+        // console.log("Disabling analytics");
         gtag("consent", "update", {
           analytics_storage: "denied",
         });
+      } else {
+        console.warn("gtag not available for analytics disable");
       }
     }
 
@@ -403,17 +459,40 @@
     enablePersonalization() {
       // Enable personalization cookies
       if (typeof gtag !== "undefined") {
+        // console.log("Enabling personalization");
         gtag("consent", "update", {
           personalization_storage: "granted",
         });
+      } else {
+        console.warn("gtag not available for personalization enable");
       }
     }
 
     disablePersonalization() {
       // Disable personalization cookies
       if (typeof gtag !== "undefined") {
+        // console.log("Disabling personalization");
         gtag("consent", "update", {
           personalization_storage: "denied",
+        });
+      } else {
+        console.warn("gtag not available for personalization disable");
+      }
+    }
+
+    updateConsentDefaults(consent: any) {
+      // Update default consent for future page loads
+      if (typeof gtag !== "undefined") {
+        gtag("consent", "default", {
+          ad_storage: "granted", // Always granted for AdSense
+          ad_user_data: "granted", // Always granted for AdSense
+          ad_personalization: "granted", // Always granted for AdSense
+          analytics_storage: consent.analytics ? "granted" : "denied",
+          functionality_storage: "granted", // Always granted for functionality
+          security_storage: "granted", // Always granted for functionality
+          personalization_storage: consent.personalization
+            ? "granted"
+            : "denied",
         });
       }
     }

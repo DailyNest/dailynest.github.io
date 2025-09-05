@@ -48,25 +48,38 @@ const OGImage = new URL(meta.ogImage, Astro.url).href;
   <!-- Google Analytics and Consent Mode -->
   {hasGoogleAnalytics() && (
     <>
-      <script async src={`https://www.googletagmanager.com/gtag/js?id=${GOOGLE_CONFIG.GA_MEASUREMENT_ID}`}></script>
+      <script src={`https://www.googletagmanager.com/gtag/js?id=${GOOGLE_CONFIG.GA_MEASUREMENT_ID}`}></script>
       <script is:inline define:vars={{ gaId: GOOGLE_CONFIG.GA_MEASUREMENT_ID }}>
         // Set default consent state BEFORE loading gtag
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
 
-        // Set default consent state - advertising is mandatory, others denied until user chooses
+        // Debug: Log when gtag is defined
+      //  console.log("Google Analytics script loaded, gtag function defined");
+
+        // Set default consent state - advertising and functional are mandatory, others denied until user chooses
         gtag('consent', 'default', {
           'ad_storage': 'granted', // Always granted for AdSense
           'ad_user_data': 'granted', // Always granted for AdSense
           'ad_personalization': 'granted', // Always granted for AdSense
-          'analytics_storage': 'denied',
-          'functionality_storage': 'denied',
-          'security_storage': 'denied',
-          'personalization_storage': 'denied'
+          'analytics_storage': 'denied', // Will be updated when user consents
+          'functionality_storage': 'granted', // Always granted for functionality
+          'security_storage': 'granted', // Always granted for functionality
+          'personalization_storage': 'denied' // Will be updated when user consents
         });
 
         gtag('js', new Date());
-        gtag('config', gaId);
+        gtag('config', gaId, {
+          'anonymize_ip': true,
+          'allow_google_signals': false,
+          'allow_ad_personalization_signals': false
+        });
+
+        // Debug: Confirm gtag config is set
+       // console.log("Google Analytics configured with ID:", gaId);
+
+        // Make gtag globally available for debugging
+        window.gtag = gtag;
       </script>
     </>
   )}
