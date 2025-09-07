@@ -107,7 +107,6 @@ const editUrl = `${SITE.github}/edit/main/${articleContentFilePath(article)}`;
           let candidate = null;
           entries.forEach((entry) => {
             if (entry.isIntersecting) {
-              const id = entry.target.id;
               // Prefer the entry closest to the top
               if (
                 !candidate ||

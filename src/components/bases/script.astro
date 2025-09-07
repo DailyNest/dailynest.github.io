@@ -89,8 +89,21 @@
     textArea.select();
 
     try {
-      document.execCommand("copy");
-      console.log("Fallback: Text copied to clipboard");
+      // Use modern Clipboard API if available, fallback to execCommand
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard
+          .writeText(text)
+          .then(() => {
+            console.log("Fallback: Text copied to clipboard");
+          })
+          .catch((err) => {
+            console.error("Fallback: Unable to copy text to clipboard", err);
+          });
+      } else {
+        console.warn(
+          "Clipboard API not available and execCommand is deprecated"
+        );
+      }
     } catch (err) {
       console.error("Fallback: Unable to copy text to clipboard", err);
     }

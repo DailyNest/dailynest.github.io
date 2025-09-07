@@ -1,5 +1,4 @@
 import { execSync } from "node:child_process";
-import { statSync } from "node:fs";
 import getReadingTime from "reading-time";
 import { toString as ConvertToString } from "mdast-util-to-string";
 

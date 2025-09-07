@@ -4,7 +4,6 @@ import Info from "@/assets/svgs/info.astro";
 import AuthorCard from "@/components/cards/authorCard.astro";
 import ListLayout from "@/layouts/list.astro";
 import { authorsHandler } from "@/lib/handlers/authors";
-import { SITE } from "@/lib/config";
 
 const entry = await getEntry("views", "authors");
 
@@ -19,7 +18,7 @@ const [HEADER, ATTENTION] = entry.data.blocks;
 
 <ListLayout header={HEADER.title} entry={entry}>
   <!-- Organization and CollectionPage schema for authors index -->
-  <script type="application/ld+json">
+  <script is:inline type="application/ld+json">
     {JSON.stringify({
       '@context': 'https://schema.org',
       '@type': 'CollectionPage',

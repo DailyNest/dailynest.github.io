@@ -7,7 +7,7 @@ import "@fontsource-variable/source-serif-4";
 import { ClientRouter } from "astro:transitions";
 import { SITE } from "@/lib/config";
 import type { ArticleMeta, Meta } from "@/lib/types";
-import { GOOGLE_CONFIG, getGATagConfig, getGTMContainerId, hasGoogleAnalytics, hasGoogleTagManager, hasGoogleAdSense } from "@/utils/google-config";
+import { GOOGLE_CONFIG, hasGoogleAnalytics, hasGoogleTagManager, hasGoogleAdSense } from "@/utils/google-config";
 
 type Props = {
   meta: Meta | ArticleMeta;
@@ -41,7 +41,7 @@ const OGImage = new URL(meta.ogImage, Astro.url).href;
 
   <!-- Google AdSense -->
   {hasGoogleAdSense() && (
-    <script async src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${GOOGLE_CONFIG.ADSENSE_CLIENT_ID}`}
+    <script is:inline async src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${GOOGLE_CONFIG.ADSENSE_CLIENT_ID}`}
        crossorigin="anonymous"></script>
   )}
 
@@ -213,7 +213,7 @@ const OGImage = new URL(meta.ogImage, Astro.url).href;
         ))}
 
         <!-- Article structured data -->
-        <script type="application/ld+json">
+        <script is:inline type="application/ld+json">
           {JSON.stringify({
             '@context': 'https://schema.org',
             '@type': 'Article',
@@ -248,7 +248,7 @@ const OGImage = new URL(meta.ogImage, Astro.url).href;
         </script>
 
         <!-- Breadcrumb structured data -->
-        <script type="application/ld+json">
+        <script is:inline type="application/ld+json">
           {JSON.stringify({
             '@context': 'https://schema.org',
             '@type': 'BreadcrumbList',
@@ -280,7 +280,7 @@ const OGImage = new URL(meta.ogImage, Astro.url).href;
 
   {
     !isArticleMeta(meta) && meta.metaTitle ? (
-      <script type="application/ld+json">
+      <script is:inline type="application/ld+json">
         {JSON.stringify({
           '@context': 'https://schema.org',
           '@type': 'WebSite',
@@ -292,14 +292,14 @@ const OGImage = new URL(meta.ogImage, Astro.url).href;
             name: SITE.title,
             logo: {
               '@type': 'ImageObject',
-              url: new URL('/favicon.png', Astro.site).href,
+              url: new URL('/favicon.png', SITE.url).href,
             },
           },
           potentialAction: {
             '@type': 'SearchAction',
             target: {
               '@type': 'EntryPoint',
-              urlTemplate: new URL('/search?q={search_term_string}', Astro.site).href,
+              urlTemplate: new URL('/search?q={search_term_string}', SITE.url).href,
             },
             'query-input': 'required name=search_term_string',
           },

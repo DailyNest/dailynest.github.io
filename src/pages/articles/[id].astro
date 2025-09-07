@@ -1,6 +1,6 @@
 ---
 // Legacy route removed. Redirecting to homepage.
 export const getStaticPaths = () => [];
-const { redirect } = Astro;
-return redirect("/articles");
 ---
+
+<meta http-equiv="refresh" content="0;url=/articles" />

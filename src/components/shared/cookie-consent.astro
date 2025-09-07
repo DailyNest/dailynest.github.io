@@ -246,7 +246,6 @@
 
       // Show customize options
       const customizeBtn = document.getElementById("customize-cookies");
-      const arrowIcon = document.getElementById("customize-arrow");
       if (customizeBtn) {
         customizeBtn.addEventListener("click", () => {
           const isHidden = this.optionsPanel.classList.contains("hidden");
@@ -299,12 +298,6 @@
         saveBtn.addEventListener("click", () => {
           const analyticsCheckbox = document.getElementById(
             "analytics-cookies"
-          ) as HTMLInputElement;
-          const advertisingCheckbox = document.getElementById(
-            "advertising-cookies"
-          ) as HTMLInputElement;
-          const functionalCheckbox = document.getElementById(
-            "functional-cookies"
           ) as HTMLInputElement;
           const personalizationCheckbox = document.getElementById(
             "personalization-cookies"
