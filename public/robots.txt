@@ -1,3 +1,46 @@
+# Allow all major search engine and AI crawlers
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Mediapartners-Google
+Allow: /
+
+User-agent: AdsBot-Google  # Google AdSense crawler
+Allow: /
+
+User-agent: Google-InspectionTool  # Google Live Tests/Rich Results Test
+Allow: /
+
+User-agent: GPTBot  # ChatGPT/OpenAI crawler
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: OAI-SearchBot  # OpenAI search crawler
+Allow: /
+
+User-agent: Bytespider  # TikTok crawler
+Allow: /
+
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: Twitterbot
+Allow: /
+
+User-agent: LinkedInBot
+Allow: /
+
+User-agent: WhatsApp
+Allow: /
+
 User-agent: *
 Allow: /
 

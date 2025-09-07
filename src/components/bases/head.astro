@@ -54,9 +54,6 @@ const OGImage = new URL(meta.ogImage, Astro.url).href;
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
 
-        // Debug: Log when gtag is defined
-      //  console.log("Google Analytics script loaded, gtag function defined");
-
         // Set default consent state - advertising and functional are mandatory, others denied until user chooses
         gtag('consent', 'default', {
           'ad_storage': 'granted', // Always granted for AdSense
@@ -74,9 +71,6 @@ const OGImage = new URL(meta.ogImage, Astro.url).href;
           'allow_google_signals': false,
           'allow_ad_personalization_signals': false
         });
-
-        // Debug: Confirm gtag config is set
-       // console.log("Google Analytics configured with ID:", gaId);
 
         // Make gtag globally available for debugging
         window.gtag = gtag;
@@ -106,6 +100,25 @@ const OGImage = new URL(meta.ogImage, Astro.url).href;
     href={new URL("rss.xml", Astro.site)}
   />
 
+  <!-- Additional SEO Links -->
+  <link rel="home" href={new URL("/", Astro.site)} />
+  <link rel="author" href={new URL("/about", Astro.site)} />
+  <link rel="help" href={new URL("/contact", Astro.site)} />
+  <link rel="privacy-policy" href={new URL("/privacy", Astro.site)} />
+  <link rel="terms-of-service" href={new URL("/terms", Astro.site)} />
+
+  <!-- Preconnect to external domains for performance -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://www.google-analytics.com" />
+  <link rel="preconnect" href="https://www.googletagmanager.com" />
+  <link rel="preconnect" href="https://pagead2.googlesyndication.com" />
+
+  <!-- DNS prefetch for external resources -->
+  <link rel="dns-prefetch" href="//www.google-analytics.com" />
+  <link rel="dns-prefetch" href="//www.googletagmanager.com" />
+  <link rel="dns-prefetch" href="//pagead2.googlesyndication.com" />
+
   <!-- Canonical URL -->
   <link rel="canonical" href={meta.canonical || canonicalURL} />
 
@@ -113,7 +126,20 @@ const OGImage = new URL(meta.ogImage, Astro.url).href;
   <title>{isArticleMeta(meta) || Astro.url.pathname.includes('/authors/') ? meta.title : Astro.url.pathname.includes('/categories/') ? `${Astro.url.pathname.split('/')[2].charAt(0).toUpperCase() + Astro.url.pathname.split('/')[2].slice(1)} Articles | ${SITE.title}` : meta.title}</title>
   <meta name="title" content={isArticleMeta(meta) || Astro.url.pathname.includes('/authors/') ? meta.metaTitle : Astro.url.pathname.includes('/categories/') ? `${Astro.url.pathname.split('/')[2].charAt(0).toUpperCase() + Astro.url.pathname.split('/')[2].slice(1)} Articles` : meta.metaTitle} />
   <meta name="description" content={meta.description} />
-  {meta.robots ? <meta name="robots" content={meta.robots} /> : null}
+  <meta name="robots" content="index, follow" />
+  <meta name="author" content={SITE.author} />
+  <meta name="language" content="en-US" />
+  <meta name="revisit-after" content="7 days" />
+  <meta name="distribution" content="global" />
+  <meta name="rating" content="general" />
+  <meta http-equiv="content-language" content="en-US" />
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+  <meta name="theme-color" content="#ffffff" />
+  <meta name="msapplication-TileColor" content="#ffffff" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
   {
     meta.xRobotsTag ? (
       <meta http-equiv="X-Robots-Tag" content={meta.xRobotsTag} />
@@ -138,15 +164,29 @@ const OGImage = new URL(meta.ogImage, Astro.url).href;
   <meta property="og:description" content={meta.description} />
   <meta property="og:image" content={OGImage} />
   <meta property="og:image:alt" content={meta.ogImageAlt} />
+  <meta property="og:site_name" content={SITE.title} />
+  <meta property="og:locale" content="en_US" />
+  {
+    isArticleMeta(meta) && meta.keywords && meta.keywords.length > 0 ? (
+      meta.keywords.slice(0, 5).map((keyword) => (
+        <meta property="article:tag" content={keyword} />
+      ))
+    ) : null
+  }
 
   <!-- Twitter -->
-  <meta property="twitter:site" content={Astro.site} />
   <meta property="twitter:card" content="summary_large_image" />
   <meta property="twitter:url" content={canonicalURL} />
   <meta property="twitter:title" content={isArticleMeta(meta) || Astro.url.pathname.includes('/authors/') ? meta.title : Astro.url.pathname.includes('/categories/') ? `${Astro.url.pathname.split('/')[2].charAt(0).toUpperCase() + Astro.url.pathname.split('/')[2].slice(1)} Articles | ${SITE.title}` : meta.title} />
   <meta property="twitter:description" content={meta.description} />
   <meta property="twitter:image" content={OGImage} />
   <meta property="twitter:image:alt" content={meta.ogImageAlt} />
+  <meta property="twitter:site" content="@dailynest" />
+  {
+    isArticleMeta(meta) && meta.authors && meta.authors.length > 0 ? (
+      <meta property="twitter:creator" content={`@${meta.authors[0].name.toLowerCase().replace(/\s+/g, '')}`} />
+    ) : null
+  }
 
   {
     isArticleMeta(meta) ? (
@@ -167,7 +207,7 @@ const OGImage = new URL(meta.ogImage, Astro.url).href;
             <meta property="author" content={author.name} />
             <meta
               property="article:author"
-              content={`${Astro.site}authors/${author.link}`}
+              content={new URL(`authors/${author.link}`, Astro.site).href}
             />
           </>
         ))}
@@ -182,7 +222,7 @@ const OGImage = new URL(meta.ogImage, Astro.url).href;
             image: [OGImage],
             datePublished: new Date(meta.publishedTime).toISOString(),
             ...(meta.lastModified && { dateModified: new Date(meta.lastModified).toISOString() }),
-            author: meta.authors.map((a) => ({ '@type': 'Person', name: a.name, url: `${Astro.site}authors/${a.link}` })),
+            author: meta.authors.map((a) => ({ '@type': 'Person', name: a.name, url: new URL(`authors/${a.link}`, Astro.site).href })),
             mainEntityOfPage: {
               '@type': 'WebPage',
               '@id': meta.canonical || canonicalURL,
@@ -195,6 +235,43 @@ const OGImage = new URL(meta.ogImage, Astro.url).href;
                 url: new URL('/favicon.png', Astro.site).href,
               },
             },
+            ...(meta.keywords && meta.keywords.length > 0 && { keywords: meta.keywords.join(', ') }),
+            ...(meta.wordCount && { wordCount: meta.wordCount }),
+            articleSection: meta.category || 'Blog',
+            inLanguage: 'en-US',
+            isAccessibleForFree: true,
+            copyrightHolder: {
+              '@type': 'Organization',
+              name: SITE.title,
+            },
+          })}
+        </script>
+
+        <!-- Breadcrumb structured data -->
+        <script type="application/ld+json">
+          {JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              {
+                '@type': 'ListItem',
+                position: 1,
+                name: 'Home',
+                item: new URL('/', Astro.site).href,
+              },
+              {
+                '@type': 'ListItem',
+                position: 2,
+                name: meta.category || 'Blog',
+                item: new URL(`/categories/${meta.category?.toLowerCase() || 'blog'}`, Astro.site).href,
+              },
+              {
+                '@type': 'ListItem',
+                position: 3,
+                name: meta.title,
+                item: meta.canonical || canonicalURL,
+              },
+            ],
           })}
         </script>
       </>
@@ -209,6 +286,28 @@ const OGImage = new URL(meta.ogImage, Astro.url).href;
           '@type': 'WebSite',
           name: meta.metaTitle,
           url: SITE.url,
+          description: meta.description,
+          publisher: {
+            '@type': 'Organization',
+            name: SITE.title,
+            logo: {
+              '@type': 'ImageObject',
+              url: new URL('/favicon.png', Astro.site).href,
+            },
+          },
+          potentialAction: {
+            '@type': 'SearchAction',
+            target: {
+              '@type': 'EntryPoint',
+              urlTemplate: new URL('/search?q={search_term_string}', Astro.site).href,
+            },
+            'query-input': 'required name=search_term_string',
+          },
+          inLanguage: 'en-US',
+          copyrightHolder: {
+            '@type': 'Organization',
+            name: SITE.title,
+          },
         })}
       </script>
     ) : null
