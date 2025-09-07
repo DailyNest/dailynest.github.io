@@ -1,47 +1,52 @@
-# Allow all major search engine and AI crawlers
+# Allow all major search engines and AI crawlers
+
+# Google
 User-agent: Googlebot
 Allow: /
 
+# Bing
 User-agent: Bingbot
 Allow: /
 
+# Google AdSense
 User-agent: Mediapartners-Google
 Allow: /
-
-User-agent: AdsBot-Google  # Google AdSense crawler
+User-agent: AdsBot-Google
 Allow: /
 
-User-agent: Google-InspectionTool  # Google Live Tests/Rich Results Test
+# Google Tools
+User-agent: Google-InspectionTool
 Allow: /
 
-User-agent: GPTBot  # ChatGPT/OpenAI crawler
+# OpenAI
+User-agent: GPTBot
+Allow: /
+User-agent: OAI-SearchBot
 Allow: /
 
+# Anthropic Claude
 User-agent: ClaudeBot
 Allow: /
 
+# Common AI/Web crawlers
 User-agent: CCBot
 Allow: /
-
-User-agent: OAI-SearchBot  # OpenAI search crawler
+User-agent: Bytespider
 Allow: /
 
-User-agent: Bytespider  # TikTok crawler
-Allow: /
-
+# Social media crawlers
 User-agent: facebookexternalhit
 Allow: /
-
 User-agent: Twitterbot
 Allow: /
-
 User-agent: LinkedInBot
 Allow: /
-
 User-agent: WhatsApp
 Allow: /
 
+# Default for all
 User-agent: *
 Allow: /
 
+# Sitemap location
 Sitemap: https://dailynest.github.io/sitemap-index.xml
