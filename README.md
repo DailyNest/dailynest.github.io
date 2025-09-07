@@ -12,7 +12,6 @@
 [![Website](https://img.shields.io/badge/Website-dailynest.github.io-blue)](https://dailynest.github.io/)
 [![HitCount](https://hits.dwyl.com/dailynest/dailynestgithubio.svg?style=flat-square)](http://hits.dwyl.com/dailynest/dailynestgithubio)
 
-
 </div>
 
 A tech tutorials and news site built with Astro, focused on clear, readable content and a fast, accessible experience.
