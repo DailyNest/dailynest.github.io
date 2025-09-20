@@ -100,8 +100,7 @@ if (recommended.length < 3) {
         </div>
       </div>
       <ContentLayout showAds={true}>
-        <Content />
-        <AdUnit adSlot="2308296961" adLayout="in-article" adFormat="fluid" />
+        <Content slot="content-with-ads" />
       </ContentLayout>
 
       {
@@ -152,6 +151,15 @@ if (recommended.length < 3) {
           >
             Edit this article
           </a>
+        </div>
+        <!-- Vertical Ad below Edit Button -->
+        <div class="mt-4">
+          <AdUnit
+            adType="display"
+            adSlot="1038118330"
+            adFormat="auto"
+            className="w-full"
+          />
         </div>
       </div>
     </div>

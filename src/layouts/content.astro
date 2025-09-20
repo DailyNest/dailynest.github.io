@@ -1,5 +1,13 @@
 ---
 // Content layout component
+import AdUnit from "@/components/elements/AdUnit.astro";
+
+interface Props {
+  showAds?: boolean;
+}
+
+const { showAds = false } = Astro.props;
+const googleAdsenseClientId = import.meta.env.PUBLIC_GOOGLE_ADSENSE_CLIENT_ID;
 ---
 
 <article
@@ -7,6 +15,74 @@
   data-pagefind-body
 >
   <div id="article-content">
-    <slot />
+    {showAds ? (
+      <slot name="content-with-ads" />
+    ) : (
+      <slot />
+    )}
   </div>
 </article>
+
+{showAds && (
+  <script define:vars={{ googleAdsenseClientId }}>
+    function injectAdsIntoContent() {
+      const articleContent = document.getElementById('article-content');
+      if (!articleContent) return;
+
+      // Get all paragraphs in the article content
+      const paragraphs = articleContent.querySelectorAll('p');
+
+      if (paragraphs.length < 4) return; // Don't inject ads if content is too short
+
+      let adCount = 0;
+      const maxAds = 3; // Maximum number of ads to inject
+
+      // Convert NodeList to Array and filter out paragraphs that are inside other elements
+      const eligibleParagraphs = Array.from(paragraphs).filter(p => {
+        // Skip paragraphs that are inside blockquotes, lists, or other containers
+        return !p.closest('blockquote, ul, ol, pre, .ad-container');
+      });
+
+      // Shuffle and select random positions for ads
+      const adPositions = [];
+      for (let i = 2; i < eligibleParagraphs.length - 1; i++) {
+        if (Math.random() > 0.6 && adCount < maxAds) { // 40% chance
+          adPositions.push(i);
+          adCount++;
+        }
+      }
+
+      // Sort positions in reverse order to avoid index shifting
+      adPositions.sort((a, b) => b - a);
+
+      // Inject ads at selected positions
+      adPositions.forEach(pos => {
+        const targetParagraph = eligibleParagraphs[pos];
+        if (targetParagraph && targetParagraph.parentNode) {
+          const adContainer = document.createElement('div');
+          adContainer.className = 'my-6 flex justify-center ad-container';
+          adContainer.innerHTML = `
+            <div class="w-full max-w-sm">
+              <ins class="adsbygoogle"
+                   style="display:block"
+                   data-ad-client="${googleAdsenseClientId}"
+                   data-ad-slot="2308296961"
+                   data-ad-format="auto"
+                   data-full-width-responsive="true"></ins>
+              <script>(adsbygoogle = window.adsbygoogle || []).push({});<\/script>
+            </div>
+          `;
+
+          targetParagraph.parentNode.insertBefore(adContainer, targetParagraph.nextSibling);
+        }
+      });
+    }
+
+    // Run ad injection after content is loaded
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', injectAdsIntoContent);
+    } else {
+      injectAdsIntoContent();
+    }
+  </script>
+)}

@@ -8,7 +8,6 @@ interface Props {
   adLayout?: string;
   adLayoutKey?: string;
   className?: string;
-  refreshInterval?: number; // in seconds, default 5
 }
 
 const {
@@ -18,7 +17,6 @@ const {
   adLayout,
   adLayoutKey,
   className = "",
-  refreshInterval = 5,
 } = Astro.props;
 
 // Generate unique ID for this ad instance
@@ -80,72 +78,6 @@ const adId = `ad-${adType}-${adSlot}-${Math.random().toString(36).substr(2, 9)}`
 
       <script is:inline>
         (adsbygoogle = window.adsbygoogle || []).push({});
-      </script>
-
-      <script is:inline define:vars={{ adId, refreshInterval }}>
-        // Ad refresh functionality
-        (function() {
-          const adContainer = document.getElementById(adId);
-          if (!adContainer) return;
-
-          let refreshTimer;
-          let refreshCount = 0;
-          const maxRefreshes = 20; // Limit refreshes to prevent abuse
-
-          function refreshAd() {
-            const adElement = adContainer.querySelector('.adsbygoogle');
-            if (!adElement) return;
-
-            // Check if ad is loaded and visible
-            const adStatus = adElement.getAttribute('data-ad-status');
-            const isVisible = adContainer.offsetWidth > 0 && adContainer.offsetHeight > 0;
-
-            if (adStatus === 'filled' && isVisible && refreshCount < maxRefreshes) {
-              try {
-                // Clear existing ad
-                adElement.innerHTML = '';
-
-                // Re-push the ad
-                (adsbygoogle = window.adsbygoogle || []).push({});
-
-                refreshCount++;
-                console.log(`Ad refreshed (${refreshCount}/${maxRefreshes}): ${adId}`);
-              } catch (error) {
-                console.warn('Ad refresh failed:', error);
-              }
-            }
-          }
-
-          // Start refreshing after initial load
-          function startRefreshing() {
-            if (refreshTimer) clearInterval(refreshTimer);
-
-            refreshTimer = setInterval(refreshAd, refreshInterval * 1000);
-
-            // Also refresh on visibility change (tab focus, etc.)
-            document.addEventListener('visibilitychange', function() {
-              if (!document.hidden) {
-                setTimeout(refreshAd, 1000); // Small delay after tab becomes visible
-              }
-            });
-          }
-
-          // Wait for ad to load before starting refresh cycle
-          const checkAdLoaded = setInterval(function() {
-            const adElement = adContainer.querySelector('.adsbygoogle');
-            if (adElement && adElement.getAttribute('data-ad-status') === 'filled') {
-              clearInterval(checkAdLoaded);
-              setTimeout(startRefreshing, 2000); // Start refreshing 2 seconds after initial load
-            }
-          }, 500);
-
-          // Cleanup on page unload
-          window.addEventListener('beforeunload', function() {
-            if (refreshTimer) {
-              clearInterval(refreshTimer);
-            }
-          });
-        })();
       </script>
 
       <style>
