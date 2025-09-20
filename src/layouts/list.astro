@@ -2,6 +2,7 @@
 import type { CollectionEntry } from "astro:content";
 import BaseLayout from "./base.astro";
 import ViewListHeader from "@/components/shared/view-list-header.astro";
+import AdUnit from "@/components/elements/AdUnit.astro";
 
 type Props = {
   header: string;
@@ -13,10 +14,41 @@ const { entry, header } = Astro.props;
 
 <BaseLayout entry={entry}>
   <div
-    class="container flex flex-col h-full pb-8 pt-4"
-    data-pagefind-ignore="all"
+    class="grid grid-cols-1 gap-6 lg:grid-cols-[16rem_minmax(0,1248px)_16rem] xl:grid-cols-[18rem_minmax(0,1248px)_18rem]"
   >
-    <ViewListHeader title={header} />
-    <slot />
+    <!-- Left Sidebar Ad -->
+    <aside class="hidden lg:block w-48 flex-shrink-0">
+      <div class="sticky top-6">
+        <AdUnit
+          adType="display"
+          adSlot="1038118330"
+          adFormat="auto"
+          className="w-full"
+        />
+      </div>
+    </aside>
+
+    <!-- Main content column (center track) -->
+    <div class="min-w-0 lg:col-start-2">
+      <div
+        class="container flex flex-col h-full pb-8 pt-4"
+        data-pagefind-ignore="all"
+      >
+        <ViewListHeader title={header} />
+        <slot />
+      </div>
+    </div>
+
+    <!-- Right Sidebar Ad -->
+    <aside class="hidden lg:block w-48 flex-shrink-0">
+      <div class="sticky top-6">
+        <AdUnit
+          adType="display"
+          adSlot="1038118330"
+          adFormat="auto"
+          className="w-full"
+        />
+      </div>
+    </aside>
   </div>
 </BaseLayout>

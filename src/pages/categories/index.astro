@@ -16,7 +16,6 @@ if (!entry) {
 const articles = categoriesHandler.allCategoriesWithLatestArticles();
 ---
 
-{/* Use your BaseLayout and pass the entry for metadata */}
 <ListLayout header={"All Categories"} entry={entry}>
   <ul class="w-full space-y-8 my-6">
     {
@@ -44,9 +43,6 @@ const articles = categoriesHandler.allCategoriesWithLatestArticles();
                 </a>
               </div>
               <div class="snap-x">
-                {/* {latestArticles.slice(0, 6).map((article, index) => (
-                  <NewsCard article={article} index={index} />
-                ))} */}
                 <div class="flex overflow-x-auto pb-4 space-x-4 snap-x snap-proximity">
                   {latestArticles.slice(0, 6).map((article, index) => (
                     <div class="snap-start flex-none lg:flex-initial">
@@ -62,9 +58,9 @@ const articles = categoriesHandler.allCategoriesWithLatestArticles();
               categoryIndex !== articles.length - 1 && (
                 <li class="my-8 flex justify-center">
                   <AdUnit
-                    adType="fluid-layout"
-                    adSlot="5304666400"
-                    adLayoutKey="-fb+5w+4e-db+86"
+                    adType="display"
+                    adSlot="1673926045"
+                    adFormat="auto"
                     className="w-full max-w-4xl"
                   />
                 </li>
@@ -74,4 +70,13 @@ const articles = categoriesHandler.allCategoriesWithLatestArticles();
       })
     }
   </ul>
+
+  <!-- Autorelaxed Ad below categories list -->
+  <div class="my-8 flex justify-center">
+    <AdUnit
+      adType="autorelaxed"
+      adSlot="9560154927"
+      className="w-full max-w-4xl"
+    />
+  </div>
 </ListLayout>

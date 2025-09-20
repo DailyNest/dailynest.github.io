@@ -10,18 +10,49 @@ const { showAds = false } = Astro.props;
 const googleAdsenseClientId = import.meta.env.PUBLIC_GOOGLE_ADSENSE_CLIENT_ID;
 ---
 
-<article
-  class="prose md:prose-lg py-8 container prose-img:border prose-img:mx-auto prose-img:border-base-200 prose-img:rounded-lg prose-p:break-words prose-a:break-all prose-pre:break-words prose-pre:cursor-text prose-code:break-words prose-code:whitespace-pre-wrap"
-  data-pagefind-body
+<div
+  class="grid grid-cols-1 gap-6 lg:grid-cols-[16rem_minmax(0,1248px)_16rem] xl:grid-cols-[18rem_minmax(0,1248px)_18rem]"
 >
-  <div id="article-content">
-    {showAds ? (
-      <slot name="content-with-ads" />
-    ) : (
-      <slot />
-    )}
+  <!-- Left Sidebar Ad -->
+  <aside class="hidden lg:block w-48 flex-shrink-0">
+    <div class="sticky top-6">
+      <AdUnit
+        adType="display"
+        adSlot="1038118330"
+        adFormat="auto"
+        className="w-full"
+      />
+    </div>
+  </aside>
+
+  <!-- Main content column (center track) -->
+  <div class="min-w-0 lg:col-start-2">
+    <article
+      class="prose md:prose-lg py-8 container prose-img:border prose-img:mx-auto prose-img:border-base-200 prose-img:rounded-lg prose-p:break-words prose-a:break-all prose-pre:break-words prose-pre:cursor-text prose-code:break-words prose-code:whitespace-pre-wrap"
+      data-pagefind-body
+    >
+      <div id="article-content">
+        {showAds ? (
+          <slot name="content-with-ads" />
+        ) : (
+          <slot />
+        )}
+      </div>
+    </article>
   </div>
-</article>
+
+  <!-- Right Sidebar Ad -->
+  <aside class="hidden lg:block w-48 flex-shrink-0">
+    <div class="sticky top-6">
+      <AdUnit
+        adType="display"
+        adSlot="1038118330"
+        adFormat="auto"
+        className="w-full"
+      />
+    </div>
+  </aside>
+</div>
 
 {showAds && (
   <script define:vars={{ googleAdsenseClientId }}>
