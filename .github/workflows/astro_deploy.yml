@@ -30,6 +30,8 @@ jobs:
       # 3. Create .env file with secrets
       - name: Create .env file
         run: |
+          echo "RUN_KEYSTATIC=false" >> .env
+          echo "PUBLIC_BUILD_ENV=production" >> .env
           echo "PUBLIC_GISCUS_REPO=${{ secrets.PUBLIC_GISCUS_REPO }}" >> .env
           echo "PUBLIC_GISCUS_REPO_ID=${{ secrets.PUBLIC_GISCUS_REPO_ID }}" >> .env
           echo "PUBLIC_GISCUS_CATEGORY=${{ secrets.PUBLIC_GISCUS_CATEGORY }}" >> .env

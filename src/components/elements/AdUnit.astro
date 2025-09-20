@@ -1,0 +1,94 @@
+---
+import { GOOGLE_CONFIG } from "@/utils/google-config";
+
+interface Props {
+  adSlot: string;
+  adType?: "in-article" | "display" | "fluid-layout" | "autorelaxed";
+  adFormat?: string;
+  adLayout?: string;
+  adLayoutKey?: string;
+  className?: string;
+}
+
+const {
+  adSlot,
+  adType = "in-article",
+  adFormat,
+  adLayout,
+  adLayoutKey,
+  className = "",
+} = Astro.props;
+---
+
+{
+  GOOGLE_CONFIG.ADSENSE_CLIENT_ID && (
+    <div class={`ad-container ${className}`} style="min-height: 0;">
+      <script
+        is:inline
+        async
+        src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${GOOGLE_CONFIG.ADSENSE_CLIENT_ID}`}
+        crossorigin="anonymous"
+      />
+
+      {adType === "display" && (
+        <ins
+          class="adsbygoogle"
+          style="display:block; min-height: 0;"
+          data-ad-client={GOOGLE_CONFIG.ADSENSE_CLIENT_ID}
+          data-ad-slot={adSlot}
+          data-ad-format={adFormat || "auto"}
+          data-full-width-responsive="true"
+        />
+      )}
+
+      {adType === "fluid-layout" && (
+        <ins
+          class="adsbygoogle"
+          style="display:block"
+          data-ad-format="fluid"
+          data-ad-layout-key={adLayoutKey}
+          data-ad-client={GOOGLE_CONFIG.ADSENSE_CLIENT_ID}
+          data-ad-slot={adSlot}
+        />
+      )}
+
+      {adType === "autorelaxed" && (
+        <ins
+          class="adsbygoogle"
+          style="display:block"
+          data-ad-format="autorelaxed"
+          data-ad-client={GOOGLE_CONFIG.ADSENSE_CLIENT_ID}
+          data-ad-slot={adSlot}
+        />
+      )}
+
+      {adType === "in-article" && (
+        <ins
+          class="adsbygoogle"
+          style="display:block; text-align:center;"
+          data-ad-layout={adLayout || "in-article"}
+          data-ad-format={adFormat || "fluid"}
+          data-ad-client={GOOGLE_CONFIG.ADSENSE_CLIENT_ID}
+          data-ad-slot={adSlot}
+        />
+      )}
+
+      <script is:inline>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+
+      <style>
+        .ad-container:empty,
+        .ad-container:has(.adsbygoogle:not([data-ad-status])) {
+          display: none !important;
+        }
+        .adsbygoogle {
+          min-height: 0 !important;
+        }
+        .adsbygoogle[data-ad-status="unfilled"] {
+          display: none !important;
+        }
+      </style>
+    </div>
+  )
+}

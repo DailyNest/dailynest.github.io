@@ -4,6 +4,7 @@ import BaseLayout from "@/layouts/base.astro";
 import ContentLayout from "@/layouts/content.astro";
 import ArticleHeader from "../../../_components/article-header.astro";
 import Giscus from "@/components/elements/giscus.astro";
+import AdUnit from "@/components/elements/AdUnit.astro";
 import NewsCard from "@/components/cards/newsCard.astro";
 import { SITE } from "@/lib/config";
 
@@ -98,8 +99,9 @@ if (recommended.length < 3) {
           </details>
         </div>
       </div>
-      <ContentLayout>
+      <ContentLayout showAds={true}>
         <Content />
+        <AdUnit adSlot="2308296961" adLayout="in-article" adFormat="fluid" />
       </ContentLayout>
 
       {
@@ -261,4 +263,37 @@ if (recommended.length < 3) {
   }
   document.addEventListener("astro:page-load", initTOC);
   document.addEventListener("astro:after-swap", initTOC);
+
+  // Position the ad after the 3rd paragraph
+  function positionArticleAd() {
+    const articleContent = document.getElementById("article-content");
+    const adContainer = document.querySelector(".ad-container");
+
+    if (!articleContent || !adContainer) return;
+
+    // Get all paragraphs in the article
+    const paragraphs = articleContent.querySelectorAll("p");
+
+    // Move ad after the 3rd paragraph (if it exists)
+    if (paragraphs.length >= 3) {
+      const targetParagraph = paragraphs[2];
+      targetParagraph.parentNode.insertBefore(
+        adContainer,
+        targetParagraph.nextSibling
+      );
+    }
+  }
+
+  // Run ad positioning after TOC is initialized
+  const initAds = () => {
+    setTimeout(positionArticleAd, 100); // Small delay to ensure content is rendered
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initAds, { once: true });
+  } else {
+    initAds();
+  }
+  document.addEventListener("astro:page-load", initAds);
+  document.addEventListener("astro:after-swap", initAds);
 </script>

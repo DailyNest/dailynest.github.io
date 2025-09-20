@@ -5,6 +5,7 @@ import Headlines from "@/pages/_home/headlines.astro";
 import LatestNews from "@/pages/_home/latestNews.astro";
 import Authors from "@/pages/_home/authors.astro";
 import HeaderSection from "@/pages/_home/headerSection.astro";
+import AdUnit from "@/components/elements/AdUnit.astro";
 
 const entry = await getEntry("views", "home");
 
@@ -20,7 +21,46 @@ if (!entry) {
       {entry.data.description}
     </p>
   </section>
-  <Headlines />
-  <LatestNews />
-  <Authors />
+
+  <!-- Main Content with Side Ads -->
+  <div class="container">
+    <div
+      class="grid grid-cols-1 lg:grid-cols-[auto_1fr_auto] gap-6 items-start"
+    >
+      <!-- Left Sidebar Ad -->
+      <aside class="hidden lg:block w-48 flex-shrink-0">
+        <div class="sticky top-6">
+          <AdUnit
+            adType="display"
+            adSlot="1038118330"
+            adFormat="auto"
+            className="w-full"
+          />
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="min-w-0 flex-1">
+        <Headlines />
+        <LatestNews />
+
+        <!-- Autorelaxed Ad -->
+        <AdUnit adType="autorelaxed" adSlot="9560154927" className="my-8" />
+
+        <Authors />
+      </main>
+
+      <!-- Right Sidebar Ad -->
+      <aside class="hidden lg:block w-48 flex-shrink-0">
+        <div class="sticky top-6">
+          <AdUnit
+            adType="display"
+            adSlot="1038118330"
+            adFormat="auto"
+            className="w-full"
+          />
+        </div>
+      </aside>
+    </div>
+  </div>
 </BaseLayout>

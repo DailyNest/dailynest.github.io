@@ -7,6 +7,7 @@ import ListLayout from "@/layouts/list.astro";
 
 import Pagination from "@/components/shared/pagination.astro";
 import WideCard from "@/components/cards/wideCard.astro";
+import AdUnit from "@/components/elements/AdUnit.astro";
 import { getEntry } from "astro:content";
 
 export const getStaticPaths = (async ({ paginate }) => {
@@ -42,11 +43,26 @@ if (!entry) {
 <ListLayout header={params.category} entry={entry}>
   <ul class="flex flex-col gap-2 flex-1">
     {
-      articles.map((article) => (
-        <WideCard
-          article={article}
-          isLast={articles.lastIndexOf(article) === articles.length - 1}
-        />
+      articles.map((article, index) => (
+        <>
+          <WideCard
+            article={article}
+            isLast={articles.lastIndexOf(article) === articles.length - 1}
+          />
+          {/* Insert ad after every 3rd item, but not after the last item */}
+          {index > 0 &&
+            (index + 1) % 3 === 0 &&
+            index !== articles.length - 1 && (
+              <li class="my-4">
+                <AdUnit
+                  adType="fluid-layout"
+                  adSlot="5304666400"
+                  adLayoutKey="-fb+5w+4e-db+86"
+                  className="w-full"
+                />
+              </li>
+            )}
+        </>
       ))
     }
   </ul>
