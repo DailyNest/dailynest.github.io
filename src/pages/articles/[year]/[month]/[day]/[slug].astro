@@ -128,6 +128,15 @@ if (recommended.length < 3) {
           </section>
         ) : null
       }
+      }
+
+      <!-- Autorelaxed Ad -->
+      <AdUnit
+        adType="autorelaxed"
+        adSlot="9560154927"
+        className="my-8 text-center"
+      />
+
       <!-- Comments -->
       <div class="mt-8">
         <Giscus />
@@ -272,6 +281,22 @@ if (recommended.length < 3) {
   document.addEventListener("astro:page-load", initTOC);
   document.addEventListener("astro:after-swap", initTOC);
 
+  // Function to wait for AdSense to load
+  function waitForAdSense(callback, maxAttempts = 50) {
+    let attempts = 0;
+    const checkAdSense = () => {
+      attempts++;
+      if (window.adsbygoogle) {
+        callback();
+      } else if (attempts < maxAttempts) {
+        setTimeout(checkAdSense, 100); // Check every 100ms
+      } else {
+        console.warn("AdSense failed to load within timeout");
+      }
+    };
+    checkAdSense();
+  }
+
   // Position the ad after the 3rd paragraph
   function positionArticleAd() {
     const articleContent = document.getElementById("article-content");
@@ -292,10 +317,12 @@ if (recommended.length < 3) {
     }
   }
 
-  // Run ad positioning after TOC is initialized
-  const initAds = () => {
-    setTimeout(positionArticleAd, 100); // Small delay to ensure content is rendered
-  };
+  // Run ad positioning after both DOM and AdSense are loaded
+  function initAds() {
+    waitForAdSense(() => {
+      setTimeout(positionArticleAd, 100); // Small delay to ensure content is rendered
+    });
+  }
 
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", initAds, { once: true });

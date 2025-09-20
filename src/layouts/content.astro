@@ -92,28 +92,61 @@ const googleAdsenseClientId = import.meta.env.PUBLIC_GOOGLE_ADSENSE_CLIENT_ID;
         if (targetParagraph && targetParagraph.parentNode) {
           const adContainer = document.createElement('div');
           adContainer.className = 'my-6 flex justify-center ad-container';
-          adContainer.innerHTML = `
-            <div class="w-full max-w-sm">
-              <ins class="adsbygoogle"
-                   style="display:block"
-                   data-ad-client="${googleAdsenseClientId}"
-                   data-ad-slot="2308296961"
-                   data-ad-format="auto"
-                   data-full-width-responsive="true"></ins>
-              <script>(adsbygoogle = window.adsbygoogle || []).push({});<\/script>
-            </div>
-          `;
+
+          // Create ad wrapper
+          const adWrapper = document.createElement('div');
+          adWrapper.className = 'w-full';
+
+          // Create ins element
+          const insElement = document.createElement('ins');
+          insElement.className = 'adsbygoogle';
+          insElement.style.display = 'block';
+          insElement.setAttribute('data-ad-client', googleAdsenseClientId);
+          insElement.setAttribute('data-ad-slot', '1673926045');
+          insElement.setAttribute('data-ad-format', 'auto');
+          insElement.setAttribute('data-full-width-responsive', 'true');
+
+          // Create push script
+          const pushScript = document.createElement('script');
+          pushScript.textContent = '(adsbygoogle = window.adsbygoogle || []).push({});';
+
+          // Append elements
+          adWrapper.appendChild(insElement);
+          adWrapper.appendChild(pushScript);
+          adContainer.appendChild(adWrapper);
 
           targetParagraph.parentNode.insertBefore(adContainer, targetParagraph.nextSibling);
         }
       });
     }
 
-    // Run ad injection after content is loaded
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', injectAdsIntoContent);
-    } else {
-      injectAdsIntoContent();
+    // Function to wait for AdSense to load
+    function waitForAdSense(callback, maxAttempts = 50) {
+      let attempts = 0;
+      const checkAdSense = () => {
+        attempts++;
+        if (window.adsbygoogle) {
+          callback();
+        } else if (attempts < maxAttempts) {
+          setTimeout(checkAdSense, 100); // Check every 100ms
+        } else {
+          console.warn('AdSense failed to load within timeout');
+        }
+      };
+      checkAdSense();
     }
+
+    // Run ad injection after both DOM and AdSense are loaded
+    function initAds() {
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+          waitForAdSense(injectAdsIntoContent);
+        });
+      } else {
+        waitForAdSense(injectAdsIntoContent);
+      }
+    }
+
+    initAds();
   </script>
 )}

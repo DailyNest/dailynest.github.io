@@ -26,13 +26,6 @@ const adId = `ad-${adType}-${adSlot}-${Math.random().toString(36).substr(2, 9)}`
 {
   GOOGLE_CONFIG.ADSENSE_CLIENT_ID && (
     <div id={adId} class={`ad-container ${className}`} style="min-height: 0;">
-      <script
-        is:inline
-        async
-        src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${GOOGLE_CONFIG.ADSENSE_CLIENT_ID}`}
-        crossorigin="anonymous"
-      />
-
       {adType === "display" && (
         <ins
           class="adsbygoogle"

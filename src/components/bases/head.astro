@@ -41,8 +41,12 @@ const OGImage = new URL(meta.ogImage, Astro.url).href;
 
   <!-- Google AdSense -->
   {hasGoogleAdSense() && (
-    <script is:inline async src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${GOOGLE_CONFIG.ADSENSE_CLIENT_ID}`}
-       crossorigin="anonymous"></script>
+    <>
+      <link rel="preload" as="script" href={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${GOOGLE_CONFIG.ADSENSE_CLIENT_ID}`}>
+      <link rel="prefetch" href={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${GOOGLE_CONFIG.ADSENSE_CLIENT_ID}`}>
+      <script is:inline async src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${GOOGLE_CONFIG.ADSENSE_CLIENT_ID}`}
+         crossorigin="anonymous"></script>
+    </>
   )}
 
   <!-- Google Analytics and Consent Mode -->
