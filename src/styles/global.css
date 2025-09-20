@@ -90,18 +90,3 @@
 }
 
 /* Ad handling for responsive layout */
-.ad-container:empty,
-.ad-container:has(.adsbygoogle:not([data-ad-status])) {
-  display: none !important;
-}
-
-.adsbygoogle[data-ad-status="unfilled"] {
-  display: none !important;
-}
-
-/* Ensure sidebar collapses when ad is not loaded */
-aside:has(.ad-container:empty),
-aside:has(.ad-container:has(.adsbygoogle:not([data-ad-status]))),
-aside:has(.ad-container:has(.adsbygoogle[data-ad-status="unfilled"])) {
-  display: none !important;
-}
